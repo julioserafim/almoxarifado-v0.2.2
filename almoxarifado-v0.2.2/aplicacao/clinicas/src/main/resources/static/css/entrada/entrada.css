@@ -1,0 +1,160 @@
+@CHARSET "UTF-8";
+
+/*
+ * Formulário entrada
+ */
+ 
+.label-curso {
+	margin-left: 10px;
+}
+
+/*
+ * Formulário alocar itens
+ */
+
+.btn-floating.btn-large {
+	position: absolute;
+	bottom: -28px;
+	right: 28px;
+}
+
+.btn-floating.btn-large i {
+	width: inherit;
+}
+
+.dynamic-list {
+	
+}
+
+.dynamic-list-element {
+    transition: all 0.4s cubic-bezier(0.87, -0.41, 0.19, 1.44);
+    opacity: 0.0;
+    transform: scale(0, 1);
+}
+
+.dynamic-list-added {
+    transform: scale(1, 1);
+    opacity: 1.0;
+}
+
+.dynamic-list-removed {
+    transform: scale(0, 0);
+    opacity: 0.0;
+}
+
+.total {
+	position: absolute;
+	top: -28px;
+	left: 28px;
+	height: 56px;
+	border-radius: calc(56px / 2);
+	padding: 0 20px;
+	z-index: 1;
+	
+	font-size: 20px;
+	font-weight: 300;
+	line-height: 56px;
+	display: inline;
+	
+	transition: 5s linear;
+	
+}
+
+.no-margin {
+	margin: 0;
+}
+
+.material-items * {
+	font-weight: 400 !important;
+	color: #666 !important;
+}
+
+.material-items td {
+	padding: 0;
+}
+
+.collapsible-header {
+	position: relative;
+}
+
+.collapsible-body {
+	padding: 24px;
+}
+
+.collapsible li .btn-floating {
+	width: 0;
+	height: 0;
+	opacity: 0.0;
+	transition: 1s cubic-bezier(.97,.05,.85,-0.03);
+}
+
+.collapsible li.active .btn-floating {
+	opacity: 1.0;
+	width: 56px;
+	height: 56px;
+}
+
+
+/*
+ * Formulário incluir itens
+ */
+
+.dynamic-list {
+	margin-top: 24px;
+}
+
+.dynamic-list-element {
+    transition: all 0.4s cubic-bezier(0.87, -0.41, 0.19, 1.44);
+    opacity: 0.0;
+    transform: scale(0, 1);
+}
+
+.dynamic-list-added {
+    transform: scale(1, 1);
+    opacity: 1.0;
+}
+
+.dynamic-list-removed {
+    transform: scale(0, 0);
+    opacity: 0.0;
+}
+
+.total {
+	position: absolute;
+	top: -28px;
+	left: 28px;
+	height: 56px;
+	border-radius: calc(56px / 2);
+	padding: 0 20px;
+	
+	font-size: 20px;
+	font-weight: 300;
+	line-height: 56px;
+	display: inline;
+	
+	transition: 5s linear;
+	
+}
+
+.no-margin {
+	margin: 0;
+}
+
+.material-items * {
+	font-weight: 400 !important;
+	color: #666 !important;
+}
+
+.material-items td {
+	padding: 0;
+}
+
+.em-andamento {
+	font-weight: bold;
+	color: #ff3d00;
+}
+
+.finalizada {
+	font-weight: bold;
+	color: #1b5e20;
+}

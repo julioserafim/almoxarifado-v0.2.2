@@ -1,0 +1,26 @@
+<th th:fragment="table-options-header"></th>
+
+<td th:fragment="table-options-cell" class="right-align">
+	<div class="valign-wrapper right">
+   		<a th:if="${seeMoreEnabled}" class="waves-effect tooltipped"
+     		th:href="${seeMoreLink}"
+     		th:attr="data-tooltip=${seeMoreTip}, data-target=${seeMoreDataTarget}, data-url=${seeMoreDataUrl}"
+     		th:classappend="${seeMoreClass}" >
+     		<i class="material-icons">zoom_in</i>
+		</a>
+		
+   		<a  th:if="${(entrada != null and entrada.statusEntrada.descricao != 'FINALIZADA') OR (saida != null and saida.status.descricao != 'FINALIZADA')}" class="waves-effect tooltipped"
+     		th:href="${editLink}"
+     		th:attr="data-tooltip=${editTip}, data-target=${editDataTarget}, data-url=${editDataUrl}"
+     		th:classappend="${editClass}" >
+     		<i class="material-icons">edit</i>
+		</a>
+		
+   		<a th:if="${removeEnabled}" class="waves-effect tooltipped"
+     		th:href="${removeLink}"
+     		th:attr="data-tooltip=${removeTip}, data-target=${removeDataTarget}, data-url=${removeDataUrl}"
+     		th:classappend="${removeClass}" >
+     		<i class="material-icons">delete</i>
+		</a>
+	</div>
+</td>

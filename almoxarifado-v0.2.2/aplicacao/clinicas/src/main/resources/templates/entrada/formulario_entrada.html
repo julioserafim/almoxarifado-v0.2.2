@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='entrada'">
+
+<head>
+	<title>Clínicas - Cadastrar Entrada</title>
+	<link th:href="@{/css/entrada/adicionar.css}" rel="stylesheet" />
+	
+</head>
+
+<body class="grey lighten-3">
+	<section layout:fragment="conteudo">
+		<div class="row">
+		
+			<div class="col s12 breadcrumbs valign-wrapper">
+                <a th:href="@{/}" class="breadcrumb blue-grey-text">
+	                <i class="material-icons left">home</i>
+	            </a>
+	            
+	            <a th:href="@{/entrada/listar}" class="breadcrumb blue-grey-text">Entrada</a>
+	            	
+	            <a class="breadcrumb blue-grey-text">Adicionar Entrada</a>
+            </div>
+		
+			<div class="col s12">
+				<form class="card formEntrada" th:action="@{/entrada/adicionar}" th:object="${entrada}" method="post" novalidate="novalidate">
+					
+					<div class="card-image blue-grey lighten-1 center-align">
+	            		<a class="card-title-large blue-grey-text text-lighten-5">Entrada de Material</a>
+					</div>
+					
+					<div class="loading"></div>
+					
+					<div class="card-content">
+						<div class="row">
+                            <div class="col l6 m12 s12 ">
+                                <label for="tipo">Tipo de Entrada<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span> </label>
+                                <select th:field="*{tipo}" class="validate" required="required">
+                               		<option th:value="-1">Selecione um Fornecedor</option>
+                               		<option th:each="tipo : ${tipoEntrada}"
+                               				th:value="${tipo}" 
+                               				th:text="${tipo.descricao}" >
+                               		</option>
+                                </select>
+                            </div>
+	                        <div class="col l6 m6 s12 ">
+                                <label for="chegada" >Data de Chegada<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+                                <input type="text" data-mask="00/00/0000" id="chegada" th:field="${entrada.chegada}" required="required"/>
+                                <div th:if="${#fields.hasErrors('chegada')}">
+                                    <label th:errors="*{chegada}">  </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row valign-wrapper esconder DEVOLUCAO">
+                            <div class="col l12 m12 s12">
+                                <label for="setor-nome">Setor de Origem<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+                                <select id="setor-nome" th:field="*{setor}" required="required">
+                                	<option  th:value="-1">Selecione um Setor de Origem</option>
+                                	<option  th:each="setor : ${setores}" 
+                                    	     th:value="${setor.id}"
+                                        	 th:text="${setor.nome}"></option>
+                                </select> 
+                            </div>
+                        </div>
+                        <div class="row valign-wrapper esconder FORNECEDOR">
+                            <div class="col l11 m10 s10">
+                                <label for="fornecedor-nome">Fornecedor<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+                                <select id="fornecedor-nome" th:field="*{fornecedor}" required="required">
+                                	<option th:value="-1">Selecione um Fornecedor</option>
+                                	<option th:each="fornecedor : ${fornecedores}" 
+                                            th:value="${fornecedor.id}"
+                                            th:text="${fornecedor.razaoSocial}"></option>
+                                </select> 
+                            </div>
+                            
+                            <div class="col l1 m2 s2 right-align">
+                            	<a class="waves-effect grey lighten-3 btn-large btn-floating modal-trigger tooltipped"
+                            		href="#novoFornecedor"
+                            		data-tooltip="Adicionar Fornecedor">
+                            		<i class="material-icons cyan-text">add</i>
+                            	</a>
+                            </div>
+                        </div>
+                        <div class="row esconder FORNECEDOR">
+                            <div class="col l4 m4 s12 input-field">
+                                <label for="notaFiscal" >Nota Fiscal</label>
+                                <input id="notaFiscal" type="text" th:field="*{notaFiscal}"  /><br/></div>
+                            <div class="col l4 m4 s12 input-field">
+                                <label for="emissaoNotaFiscal">Data de Emissão da Nota Fiscal</label>
+                                <input id="emissaoNotaFiscal" type="text" data-mask="00/00/0000" th:field="*{emissaoNotaFiscal}"/><br/></div>
+                            <div class="col l4 m4 s12 input-field">
+                                <label for="valorNotaFiscal">Valor Total<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+                                <input id="valorNotaFiscal" type="text" data-mask="#.##0,00"  data-mask-reverse="true" th:field="*{valorNotaFiscal}" required="required"/><br/>
+                                <div th:if="${#fields.hasErrors('valorNotaFiscal')}">
+                                    <label th:errors="*{valorNotaFiscal}">  </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row esconder FORNECEDOR">
+                            <div class="col l6 m6 s12 input-field ">
+                                <label for="processoLicitacao" >Processo de Licitação</label>
+                                <input id="processoLicitacao" type="text" th:field="*{processoLicitacao}"/><br/>
+                            </div>
+                            <div class="col l6 m6 s12 input-field">
+                                <label for="licitacao" >Licitação</label>
+                                <input id="licitacao" type="text" th:field="*{licitacao}"/> <br/>
+                            </div>
+                        </div>
+
+                        <div class="row esconder FORNECEDOR">
+                            <div class="col l6 m6 s12 input-field">
+                                <label for="pregao" >Pregão</label>
+                                <input id="pregao" type="text" th:field="*{pregao}"/><br/>
+                            </div>
+                            <div class="col l6 m6 s12 input-field">
+                                <label for="notaDeEmpenho"> Nota de Empenho</label>
+                                <input id="notaDeEmpenho" type="text" th:field="*{empenho}"/><br/>
+                            </div>
+                        </div>
+                        
+               			<div class="row">
+							<div class="col s12">
+								<label for="observacao">Observações</label>								
+								<textarea id="observacao" th:field="*{observacao}" maxlength="255" class="materialize-textarea"></textarea>
+							</div>
+						</div>                            
+
+                    </div>
+
+					<div class="card-action right-align">
+		            	<a th:href="@{/entrada/listar/}" type="button" class="btn-flat waves-effect">Cancelar</a>
+	                    <button  id="bt-continuar" type="submit" value="exit" class="btn waves-effect waves-light white-text">Continuar</button>
+	                </div>
+					
+				</form>
+			</div>
+		</div>
+
+		<div id="novoFornecedor" class="modal">
+			<div class="col l10 offset-l1 m10 offset-m1 s12">
+				<form action="#" class="formFornecedor card no-margin" 
+					th:method="post" enctype="multipart/form-data">
+
+					<div class="card-image deep-orange lighten-1 center-align">
+						<a class="card-title-large blue-grey-text text-lighten-5">Cadastrar Fornecedor</a>
+
+					</div>
+
+					<div class="card-content">
+						<div class="row">
+							<div class="input-field col s6">
+								<label for="razaoSocial">Razão Social<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label> 
+								<input id="razaoSocial" type="text" th:field="*{novoFornecedor.razaoSocial}" />
+							</div>
+							<div class="input-field col s6">
+								<label for="cnpj">CNPJ<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label> 
+								<input id="cnpj" type="text" th:field="*{novoFornecedor.cnpj}" />
+							</div>
+						</div>
+					</div>
+
+					<div class="card-action right-align">
+						<a type="button" class="btn-flat waves-effect modal-close cancelar-fornecedor">Cancelar</a>
+						<button type="submit" class="btn waves-effect white-text modal-close">Salvar</button>
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+
+
+
+	</section>
+
+	<section layout:fragment="js">
+		<script type="text/javascript" th:src="@{/material-clinicas/js/loading.js}"></script>
+		<script type="text/javascript" th:src="@{/js/entrada/adicionar.js}"></script>
+		
+	</section>
+</body>
+</html>

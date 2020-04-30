@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base-listar"
+    th:with="
+    		currentPage = 'setor', 
+    		
+    		list = ${setors},
+    		emptyListMessage = 'Nenhum setor cadastrado!',
+    		
+    		addEnabled = true, 
+    		addTip = 'Adicionar um setor', 
+    		addLink = @{/setor/adicionar/},
+    		    		
+    		breadcrumbName = 'Setores', 
+    		filterEnabled = true, 
+    		filterName = 'Buscar setores'" >
+
+<head>
+    <title>Clínicas - Setores</title>
+</head>
+
+<table 
+	layout:fragment="table"
+	data-sort-col="1" data-sort-direction="asc">
+	
+   <thead>
+       <tr>
+			<th>Código</th>
+			<th>Nome</th>
+           	<th></th>
+       </tr>
+   </thead>				 
+   <tbody>
+       <tr th:each="setor:${list}">
+				<td th:text="${setor.codigo}"></td>
+				<td th:text="${setor.nome}"></td>
+				<td th:if="${setor.geral}">
+					<a class="waves-effect waves-light btn right tooltipped disabled" data-tooltip="Não é possível editar ou remover o estoque geral!">
+						<i class="material-icons center">not_interested</i>Não é possível editar ou remover o estoque geral!
+					</a>
+				</td>
+				<td th:unless="${setor.geral}" class="action">
+					<div class="right">
+						 <a class="btn-icon waves-effect tooltipped"
+							th:attr="data-tooltip='Editar Setor'"
+							th:href="@{/setor/editar/{id}(id=${setor.id})}">
+							<i class="material-icons">edit</i>
+						</a>
+						<a class="btn-icon waves-effect tooltipped"
+							th:attr="data-tooltip='Remover Setor'"
+							th:href="@{/setor/remover/{id}(id=${setor.id})}">
+							<i class="material-icons">delete</i>
+						</a>
+					</div>
+				</td>
+       	</tr>
+   </tbody>
+</table>
+
+</html>

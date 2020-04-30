@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='setor'">
+<head>
+	<title>Clínicas - Visualizar Setor</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/clinicas.css}"/>
+</head>
+
+<body class="grey lighten-3">
+	<section layout:fragment="conteudo">
+		<div class="row">
+			<div class="col s12 breadcrumbs valign-wrapper">
+				<a th:href="@{/}" class="breadcrumb blue-grey-text"> <i class="setor-icons left">home</i> </a> 
+				<a th:href="@{/setor/listar}" class="breadcrumb blue-grey-text">Setor</a>
+				<a class="breadcrumb blue-grey-text">Visualizar Setor</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12">
+				<div class="card-image indigo lighten-1 center-align">
+	        		<a class="card-title-large blue-grey-text text-lighten-5">Detalhes Setor</a>
+            	</div>
+				<div class="card">
+					<div class="card-content">
+						<div class="row no-margin">
+							<div class="col l6 m8 s12">
+								<span class="bold">Código</span> 
+								<span id="setor-nome" th:text="${setor.codigo} " class="light-text truncate text-18" 
+								 	   data-position="bottom"></span>
+							</div>
+							<div class="col l6 m8 s12">
+								<span class="bold">Nome</span> 
+								<span id="setor-nome" th:text="${setor.nome} " class="light-text truncate text-18" 
+								 	   data-position="bottom"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12">
+				<div class="card">
+					<div class="card-content">
+						<div class="row no-margin">
+							<table 
+								layout:fragment="table"
+								data-sort-col="0,1,2" data-sort-direction="desc,desc,asc">
+									
+							   <thead>
+							       <tr>
+							           <th>Data de Chegada</th>
+							           <th class="hide-on-small-only">Tipo</th>
+							           <th class="hide-on-small-only">Estado da Entrada</th>
+							           <th class="hide-on-med-and-down">Responsável</th>
+							           
+							           <!-- CABEÇALHO DE OPÇÕES -->
+							           <th th:replace="base/base-listar-options :: table-options-header"></th>
+							       </tr>
+							   </thead>				 
+							   <tbody>
+							       <tr th:each="entrada:${entradas}" 
+							       		th:with="
+							           			seeMoreEnabled = true, 
+									    		seeMoreTip = 'Ver detalhes', 
+									    		seeMoreLink = @{/entrada/{id}/visualizar/(id=${entrada.id})},
+							           		">
+							           <td th:text="${#calendars.format(entrada.chegada,'dd/MM/yyyy')}"></td>
+							           <td class="hide-on-small-only" th:text="${entrada.tipo?.descricao}"></td>
+							           <td class="hide-on-small-only bold" th:text="${entrada.statusEntrada.descricao}" th:classappend="${entrada.statusEntrada.descricao=='FINALIZADA'} ? blue-text : deep-orange-text"></td>
+							           <td class="hide-on-med-and-down" th:text="${entrada.responsavel?.nome}"></td>
+							           
+							           <!-- OPÇÕES (EDITAR, REMOVER E VER MAIS) -->
+							           <td th:replace="base/base-listar-options :: table-options-cell"></td>
+							       </tr>					        
+							   </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12">
+				<div class="card">
+					<div class="card-content">
+						<div class="row no-margin">
+							<table 
+								layout:fragment="table"
+								data-sort-col="0,1,2" data-sort-direction="desc,desc,asc">
+								
+							   <thead>
+							       <tr>
+							           <th>Tipo</th>
+							           <th>Data</th>
+							           <th>Origem</th>
+							           <th>Destino</th>
+							           <th>Status</th>
+							           <th>Responsável</th>
+							           
+							           <!-- CABEÇALHO DE OPÇÕES -->
+							           <th th:replace="base/base-listar-options :: table-options-header"></th>
+							       </tr>
+							   </thead>				 
+							   <tbody>
+							       <tr th:each="saida:${saidas}"
+							       		th:with="
+							           			seeMoreEnabled = true, 
+									    		seeMoreTip = 'Ver detalhes', 
+									    		seeMoreLink = @{/saida/{id}/visualizar(id=${saida.id})},
+							           		">
+							           		
+							           <td th:text="${saida.tipo.descricao}"></td>
+									   <td th:text="${#calendars.format(saida.data,'dd/MM/yyyy')}"></td>
+									   <td th:text="${saida.origem}? ${saida.origem.nome}: ' - '"></td>
+									   <td th:text="${saida.destino}? ${saida.destino.nome}: ' - '"></td>
+									   <td th:text="${saida.status.descricao}" class="bold" th:classappend="${saida.status.descricao=='FINALIZADA'} ? blue-text : deep-orange-text"></td>
+									   <td th:text="${saida.responsavel}? ${saida.responsavel.nome} : ' - '"></td>
+							           
+							           <!-- OPÇÕES (EDITAR, REMOVER E VER MAIS) -->
+							           <td th:replace="base/base-listar-options :: table-options-cell"></td>
+							       </tr>					        
+							   </tbody>
+							   
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</section>
+	<section layout:fragment="js">
+		<script type="text/javascript" th:src="@{/js/saida/visualizar.js}"></script>
+	</section>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='entrada'">
+
+<head>
+	<title>Clínicas - Entrada de Materiais</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<link th:href="@{/css/entrada/incluir-itens.css}" rel="stylesheet" />
+
+</head>
+
+<body class="grey lighten-3"
+	th:with="acao_url=${acao == 'ADICIONAR'? 'adicionar' :'editar' }">
+	<section layout:fragment="conteudo" class="incluirItens">
+		<div class="row">
+			<div class="col s12 breadcrumbs valign-wrapper">
+                <a th:href="@{/}" class="breadcrumb blue-grey-text">
+	                <i class="material-icons left">home</i>
+	            </a>
+	            
+	            <a th:href="@{/entrada/listar}" class="breadcrumb blue-grey-text">Entrada</a>
+	            
+	            <a class="breadcrumb blue-grey-text">Incluir Itens</a>
+	            
+            </div>
+		
+			<div class="col s12">
+				<div th:replace="entrada/entrada_header :: entrada_header" ></div>
+			</div>
+			<div class="col s12">
+			
+				<form th:object="${itemEntrada}" class="card form_item_entrada" method="post" th:attr="data-id-entrada=${entrada.id}">
+					
+					<div class="card-image blue-grey lighten-1 center-align">
+	            		<a class="card-title-large blue-grey-text text-lighten-5">Inclusão de Itens da Entrada</a>
+					</div>
+					
+					<div class="card-content">
+                        <div class="row valign-wrapper">
+                        	<input id="material-id" class="escondido"/>
+                        	<div class="col l11 m10 s10 input-field input-field-cbarras">
+	                        	<label for="acmaterial">Material<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	                        	<input id="acmaterial" type="text" class="autocomplete nome-autocomplete" required="required"/> <br/>
+                        	</div>                            
+                            <div class="col l1 m2 s2 right-align">
+<!--                             	<a class="grey lighten-3 waves-effect waves-light btn-large btn-floating modal-trigger tooltipped"
+                            		href="#modal1"
+                            		data-tooltip="Adicionar Novo Material"><i class="material-icons cyan-text">add</i></a> -->
+							</div>
+                            
+                        </div>
+                        
+                        
+                        <div class="row">
+                            <div class="col l3 m6 s12 input-field">
+                                <label for="lote" >Lote</label>
+                                <input id="lote" th:field="*{lote}" type="text" /><br/>
+                            </div>
+                            <div class="col l3 m6 s12 input-field">
+                                <label for="quantidade">Quantidade<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+                                <input id="quantidade"  th:field="*{quantidade}" type="text" onkeyup="somenteNumeros(this);" required="required"/><br/>
+                            </div>
+                            <div class="col l3 m6 s12 input-field">
+                                <label for="validade" >Validade</label>
+                                <input id="validade" th:field="*{validade}" type="text" data-mask="00/00/0000"/><br/>
+                            </div>
+                            <div class="col l3 m6 s12 input-field" th:if="${entrada.tipo.descricao == 'FORNECEDOR'}">
+                                <label for="valor-unitario">Valor Unitário<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+                                <input id="valor-unitario" th:field="*{valorUnitario}" onkeyup="somenteNumeros(this);" data-mask="#.##0,00"  data-mask-reverse="true" type="text" required="required"/><br/>
+                            </div>
+                        </div>
+                      
+                    </div>
+                    
+                    <div class="loading"></div>
+
+					<div class="card-action grey lighten-4">
+	                    <button type="button" value="exit"
+	                    	class="btn-floating btn-large btn-top-left waves-effect waves-light white-text dynamic-list-add tooltipped"
+	                    	data-delay="700" data-tooltip="Incluir Este Material na Entrada">
+	                    	<i class="material-icons">check</i>
+	                    </button>
+	                    
+	                    <div class="total grey lighten-4 blue-grey-text z-depth-1-2" th:if="${entrada.tipo.descricao == 'FORNECEDOR'}">
+	                    	Total: R$ <span id="valorTotal"  class="total-value">0000,00</span>
+	                    </div>
+	                    
+	                    <div class="row no-margin">
+                            <div class="col s12">
+                            	    		
+			                    <table class="dynamic-list highlight">
+			                    	<thead>
+           		                    	<tr>
+           		                    		<th> </th>
+				                    		<th class="">Material</th>
+				                    		<th class="center-align">Lote</th>
+				                    		<th class="center-align">Qtd.</th>
+				                    		<th class="center-align">Validade</th>
+				                    		<th class="center-align" th:if="${entrada.tipo.descricao == 'FORNECEDOR'}">Valor Unit.</th>
+				                    		<th class="right-align"> Opções </th>
+				                    	</tr>
+			                    	</thead>
+			                    	<tbody class="dynamic-list-container">
+				                    	<tr class="dynamic-list-element material-items">
+				                    		<td> <input type="hidden" class="id-item-material"/> </td>
+				                    		<td class="material-name">Material 1</td>
+				                    		<td class="center-align material-lote">0000</td>
+				                    		<td class="center-align material-quantidade">0000</td>
+				                    		<td class="center-align material-validade">03/11/1994</td>
+				                    		<td class="center-align "  th:if="${entrada.tipo.descricao == 'FORNECEDOR'}">R$<span class="material-valor-unitario">50,00</span></td>
+				                    		<td class="right-align">
+				                    			<button type="button" class="btn-floating z-depth-0 waves-effect grey lighten-4 dynamic-list-remove"><i class="material-icons blue-grey-text">delete</i></button>
+				                    		</td>				                    		
+				                    	</tr>
+				                    </tbody>
+			                    	
+			                    </table>	                    
+		                  	</div>
+		            	</div>  
+	                </div>
+	          					
+				</form>
+				
+				<div class="col s12 right-align">
+					<a type="button" class="btn-flat waves-effect white cyan-text waves-light" th:href="@{/entrada/{id}/excluir(id=${entrada.id})}">Excluir</a>				
+					<button href="#modal-finalizar" class="modal-trigger btn waves-effect waves-light" type="submit" id="finalizar">Finalizar</button>
+				</div>
+				
+				<div id="modal-finalizar" class="confirmation-modal modal" tabindex="-1" role="dialog" style="width: 30%;">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" style="position: absolute; top: 8px; right: 8px;" 
+								class="modal-close btn-icon waves-effect" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title"></h4>
+						</div>
+						<div class="modal-content text-18">
+							Deseja finalizar a inclusão?
+						</div>
+						<div class="modal-footer">
+							<a id="confirm-finalizar" class="waves-effect waves-green btn white-text modal-action modal-close button_finalizar" th:href="@{${'/entrada/'+entrada.id+'/alocarItens'}}">SIM</a>
+							<a style="margin-right: 16px;" class="waves-effect waves-red btn white cyan-text modal-action modal-close">NÃO</a>
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>		
+		<div id="modal1" class="modal">
+		
+			<form class="card no-margin formMaterial" data-model="material" method="post"
+				th:action="@{/material/api/adicionar}" th:object="${material}">
+
+				<div class="card-image indigo lighten-1 center-align">
+					<a class="card-title-large blue-grey-text text-lighten-5">Cadastrar
+						Material</a>
+				</div>
+
+				<div class="card-content">
+					<div class="row">
+						<div class="input-field col s6">
+							<input id="name" type="text" th:field="*{nome}"
+								class="validate" /> <label for="name">Nome</label>
+						</div>
+						<div class="input-field col s6">
+							<input id="cbarras" type="text" th:field="*{codigos}"
+								class="validate" /> <label for="cbarras">Código de
+								Barras</label>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="input-field col s6">
+							<input id="cinterno" type="text" th:field="*{codigoInterno}"
+								class="validate" /> <label for="cinterno">Código
+								Interno</label>
+						</div>
+						<div class="input-field col s6">
+							<input id="estoque" type="number" th:field="*{estoque}"
+								step="1" class="validate" /> <label for="estoque">Estoque</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s6">
+							<select th:field="*{unidadeMedida.id}">
+								<option th:each="medida : ${unidadesMedida}"
+									th:text="${medida.nome}" th:value="${medida.id}"></option>
+							</select> <label>Unidade de Medida</label>
+						</div>
+
+						<div class="input-field col s6">
+							<select th:field="*{grupo.id}">
+								<option th:each="grupo : ${gruposMaterial}"
+									th:text="${grupo.nome}" th:value="${grupo.id}"></option>
+							</select> <label>Grupo do Material</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-action right-align">
+					<a type="button" class="btn-flat waves-effect modal-close cancelar-material">Cancelar</a>
+					<button type="submit" value="keep_add" class="btn waves-effect white-text modal-close">SALVAR</button>
+			   </div>
+ 
+			</form>
+		</div>
+	</section>
+
+	<section layout:fragment="js">
+		<script th:src="@{/material-clinicas/js/loading.js}"></script>
+		<script th:src="@{/material-clinicas/js/dynamic-list.js}"></script>
+		<script type="text/javascript" th:src="@{/material-clinicas/plugins/autocomplete/jquery.materialize-autocomplete.js}"></script>
+		<script type="text/javascript" th:src="@{/js/entrada/incluir-itens.js}"></script>
+	</section>
+
+
+</body>
+</html>

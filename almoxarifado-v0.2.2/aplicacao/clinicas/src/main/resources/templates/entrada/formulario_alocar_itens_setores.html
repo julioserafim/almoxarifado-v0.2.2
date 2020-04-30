@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='entrada'">
+
+<head>
+	<title>Clínicas - Cadastrar entrada</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<link th:href="@{/css/entrada/incluir-itens.css}" rel="stylesheet" />
+	<link th:href="@{/css/entrada/alocar.css}" rel="stylesheet" />
+</head>
+
+<body class="grey lighten-3"
+	th:with="acao_url=${acao == 'ADICIONAR'? 'adicionar' :'editar' }">
+	<section layout:fragment="conteudo">
+		<div class="row">
+		
+			<div class="col s12 breadcrumbs valign-wrapper">
+                <a th:href="@{/}" class="breadcrumb blue-grey-text">
+	                <i class="material-icons left">home</i>
+	            </a>
+	            
+	            <a th:href="@{/entrada/listar}" class="breadcrumb blue-grey-text">Entrada</a>
+	            
+	            <a class="breadcrumb blue-grey-text">Alocar Materiais</a>
+	            
+            </div>
+		
+			<div class="col s12">
+				<input type="hidden" class="entrada-id" th:value="${entrada.id}"/>
+				<div th:replace="entrada/entrada_header :: entrada_header" ></div>
+			</div>
+			<div class="col s12">
+			
+				<ul class="collapsible collapsible-materials popout card-content" data-collapsible="accordion">
+					<li th:each="item, iterStat : ${entrada.itens}" class="grey lighten-5">
+						<div th:class="${iterStat.index} == 0? 'active collapsible-header' : 'collapsible-header'">
+							<span th:if="${item.material}" th:text="${item.material.nome + ' - '}"></span>
+							<span th:class="|itens-alocados-${iterStat.index}|" th:text="${item.quantidade}"></span>
+							<span th:text="${' de '+item.quantidade}"></span>
+							<input type="hidden" th:class="|qtd-total-${iterStat.index}|" th:value="${item.quantidade}"/>
+						</div>
+						<div class="collapsible-body">
+							
+							<button type="button" value="exit"
+		                    	th:class="|dynamic-list-add-${iterStat.index} btn-floating btn-large waves-effect waves-light white-text tooltipped|"
+		                    	data-delay="700" data-tooltip="Adicionar Material na Entrada">
+		                    	<i class="material-icons">add</i>
+		                    </button>
+		                    
+		                    <input type="hidden" th:id="${'item-entrada-'+iterStat.index}" th:value="${item.id}" />
+		                    
+							<div class="row">
+	                            <div class="col l6 m6 s12 input-field">
+	                                <select th:id="${'setor-'+iterStat.index}" required="required" >
+	                                	<option   value="-1" >Selecione um Setor</option>
+	                                	<option th:each="setor:${setores}" th:value="${setor.id}" th:text="${setor.nome}" ></option>
+	                                </select> 
+	                                <label for="setor">Setor<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	                            </div>
+	                            
+	                            <div class="col l6 m6 s12 input-field">
+	                                <label for="quantidade" >Quantidade<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	                                <input th:id="${'quantidade-'+iterStat.index}" type="number" min="0" required="required" /><br/>
+	                            </div>
+	                        </div>
+	                        
+	                        <div class="row no-margin">
+	                            <div class="col s12">
+	                            	
+				                    <table th:class="|dynamic-list-${iterStat.index}|">
+				                    	<tbody th:class="|dynamic-list-container-${iterStat.index}|">
+					                    	<tr th:class="|dynamic-list-element-${iterStat.index} material-items dynamic-list-element|">
+					                    		<input type="hidden" class="alocacao-item-setor-id" />
+						                    	<td class="alocacao-item-setor-nome"></td>
+					                    		<td class="center-align alocacao-item-quantidade"></td>
+					                    		<td class="right-align">
+					                    			<button type="button"
+					                    				th:class="|dynamic-list-remove-${iterStat.index} btn-floating z-depth-0 waves-effect grey lighten-4|">
+					                    				<i class="material-icons blue-grey-text">delete</i>
+					                    			</button>
+			                    				</td>
+					                    	</tr>
+					                    </tbody>
+				                    	
+				                    </table>	                    
+			                  	</div>
+			            	</div>  
+							
+						</div>
+					</li>
+				</ul>
+				<div class="col s12 right-align">			
+					<button id="btn-finalizar-alocacao" class="btn waves-effect waves-light" disabled="disabled" th:href="@{/entrada/{id}/finalizar_entrada(id=${entrada.id})}">Finalizar</button>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+
+	<section layout:fragment="js">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+		<script th:src="@{/material-clinicas/js/dynamic-list.js}"></script>
+		<script th:src="@{/material-clinicas/js/loading.js}"></script>
+		<script type="text/javascript" th:src="@{/js/entrada/alocar-itens.js}"></script>
+	</section>
+</body>
+</html>

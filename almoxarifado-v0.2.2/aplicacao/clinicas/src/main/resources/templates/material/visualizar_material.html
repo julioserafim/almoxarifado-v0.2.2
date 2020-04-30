@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base" th:with="currentPage='material'">
+<head>
+<title>Clínicas - Visualizar Material</title>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"
+	rel="stylesheet" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/clinicas.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/material/visualizar.css}" />
+</head>
+
+<body class="grey lighten-3">
+	<section layout:fragment="conteudo">
+		<div class="row">
+			<div class="col s12 breadcrumbs valign-wrapper">
+				<a th:href="@{/}" class="breadcrumb blue-grey-text"> <i
+					class="material-icons left">home</i>
+				</a> <a th:href="@{/material/listar}" class="breadcrumb blue-grey-text">Materiais</a>
+				<a class="breadcrumb blue-grey-text">Visualizar Material</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12">
+				<div class="card-image indigo lighten-1 center-align">
+					<a class="card-title-large blue-grey-text text-lighten-5">Detalhes
+						Material</a>
+				</div>
+				<div class="card">
+					<div class="card-content">
+						<div class="row">
+							<div class="col l6 m8 s12">
+								<span class="bold">Nome</span>
+								<span id="material-nome"
+									  th:text="${material.nome} "
+									  class="light-text truncate text-18"
+									  data-position="bottom"></span>
+							</div>
+							<div class="col l3 m2 s12">
+								<span class="bold">Unidade de Medida</span>
+								<span id="material-unidade-medida"
+									  th:text="${material.unidadeMedida.nome}"
+								      class="light-text truncate text-18"></span>
+							</div>
+							<div class="col l3 m2 s12">
+								<span class="bold">Quantidade em Estoque </span> <span
+									id="material-estoque" th:text="${material.estoque}"
+									class="light-text truncate text-18"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col l6 m8 s12">
+								<span class="bold">Descrição</span> <span
+									id="material-descricao"
+									th:text="${material.descricao == '' ? '-': material.descricao}"
+									class="light-text truncate text-18" data-position="bottom"></span>
+							</div>
+							<div class="col l3 m2 s12">
+								<span class="bold">Grupo</span> <span id="material-grupo"
+									th:text="${material.grupo != null} ? ${material.grupo.nome}:'-'"
+									class="light-text truncate text-18"></span>
+							</div>
+							<div class="col l3 m2 s12">
+								<span class="bold">Cód. Interno</span> <span
+									id="material-cod-interno" th:text="${material.codigoInterno}"
+									class="light-text truncate text-18"></span>
+							</div>
+						</div>
+						
+						<div class="row no-margin">
+							<div class="col l6 m8 s12">
+								<span class="bold">Códigos de Barras</span> <br />
+								<div class="chip" th:each="cod : ${material.codigos}" th:object="${cod}" th:if="${cod.codigo} != '' ">
+									<i class="mdi mdi-barcode truncate code-icon center-align"></i>
+									<span th:text="${cod.codigo}"></span>
+								</div>
+							</div>
+							<div class="col l3 m2 s12">
+								<span class="bold">Estoque Mínimo </span> <span
+									id="estoque-minimo" th:text="${material.estoqueMinimo}"
+									class="light-text  text-18"></span>
+						</div>
+						</div>
+						
+						<div class="row no-margin">
+							<div class="col s12">
+								<div class="valign-wrapper right">
+									<a th:attr="data-tooltip='Editar material'"
+										class="btn-icon waves-effect tooltipped"
+										th:href="@{/material/editar/__${material.id}__}"> <i
+										class="material-icons">edit</i>
+									</a> <a th:href="@{/material/remover/__${material.id}__}"
+										th:attr="data-tooltip='Excluir material'"
+										class="btn-icon waves-effect tooltipped confirm"> <i
+										class="material-icons red-text">delete</i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12">
+			<div class="card-image indigo lighten-1 center-align">
+					<a class="card-title-large blue-grey-text text-lighten-5">Lotes do Material</a>
+				</div>
+				<div class="card">
+					<div class="card-content">
+
+						<table id="table-material" layout:fragment="table" data-sort-direction="desc,desc,asc"
+							class="mf-table-lite striped" data-filter="#table-filter">
+							
+
+							<thead>
+								<tr>
+									<th>Lote</th>
+									<th>Validade</th>
+									<th>Quantidade</th>
+									<th class="table-actions">Ações</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="lote : ${lotes}">
+									<td th:text="${lote.lote != ''} ? ${lote.lote} : '-'"><i class="material-icons left">home</i></td>
+									<td th:text="${lote.validade} ? ${#calendars.format(lote.validade, 'dd/MM/yyyy')} : '-'"></td>
+									<td th:text="${lote.quantidade}"></td>
+									<td class="table-actions">
+										<a class="edicaoEstoque btn-icon waves-effect tooltipped" style="cursor: pointer"
+											th:attr="data-tooltip='Editar', material =${lote.material.id} ,estoque=${lote.id}, lote=${lote.lote}, validade = ${lote.validade}">
+											<i class="material-icons left">edit</i>
+										</a>
+										<a  th:if="${lote.quantidade EQ 0}"
+											th:href="@{/material/__${material.id}__/excluirEstoqueLote/__${lote.id}__}"
+											th:attr="data-tooltip='Excluir lote'"
+											class="btn-icon waves-effect tooltipped confirm"> <i
+											class="material-icons red-text">delete</i>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12">
+				<div class="card-image indigo lighten-1 center-align">
+					<a class="card-title-large blue-grey-text text-lighten-5">Alocação de Material por Setor</a>
+				</div>
+				<div class="card">
+					<div class="card-content">
+						<table id="table-material" class="mf-table-lite striped">
+
+							<thead>
+								<tr>
+									<th>Setor</th>
+									<th>Estoque</th>
+									<th class="hide"></th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr th:each="estoque : ${estoques}" class="val-material">
+									<td th:text="${estoque.setor.nome}"
+										class="val-nome-setor max-width-200"></td>
+
+									<td th:text="${estoque.quantidade}"
+										class="val-estoque-material"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Modal Structure -->
+		<div id="modal-editar-estoque" class="modal">
+			<div class="modal-content">
+				<h4>Edição de estoque</h4>
+				<div class="row">
+					<div class="col s6">
+						<span class="bold">Lote</span> <input type="text" id="loteEditado" />
+					</div>
+					<div class="col s6">
+						<span class="bold">Validade</span> <input type="text"
+							data-mask="00/00/0000" id="validadeEditada" />
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a class="btn waves-effect waves-light white-text confirm-editar-estoque">Editar</a>
+				<a class="btn btn-flat waves-effect cancelar-edicao-estoque">Cancelar</a>
+			</div>
+		</div>
+
+	</section>
+	<section layout:fragment="js">
+		<script type="text/javascript" th:src="@{/js/material/visualizar.js}"></script>
+	</section>
+</body>
+<script type="text/javascript" th:src="@{/javascript/clinicas.js}"></script>
+</html>

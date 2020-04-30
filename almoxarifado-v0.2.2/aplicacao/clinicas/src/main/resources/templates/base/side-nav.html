@@ -1,0 +1,99 @@
+
+<ul id="slide-out" class="side-nav fixed " th:fragment="side-nav">
+    <li>
+    	<a class="userView waves-effect waves-light blue-grey valign-wrapper" th:href="@{/}">
+	        <i class="cover material-icons blue-grey-text text-lighten-5 tooltipped" data-tooltip="Início" data-position="right">dashboard</i>
+	        <span class="blue-grey-text text-lighten-5 title">CLÍNICAS</span>
+    	</a>
+    </li>
+    
+    <li>
+    	<a th:href="@{/}" 
+    		th:classappend="(${currentPage} == 'inicio')? sidenav-active" 
+    		class="waves-effect waves-light">
+    		
+    		<i class="material-icons tooltipped" data-tooltip="Início" data-position="right">home</i> Início
+    	</a>
+    </li>
+
+	<li>
+		<a th:href="@{/material/listar}"
+		   th:classappend="(${currentPage} == 'material')? sidenav-active"
+		   class="waves-effect waves-light">
+
+			<i class="mdi mdi-package-variant tooltipped" data-tooltip="Materiais" data-position="right"></i>Materiais
+		</a>
+	</li>
+    	
+    <li>
+    	<a th:href="@{/entrada/listar}" 
+    		th:classappend="(${currentPage} == 'entrada')? sidenav-active" 
+    		class="waves-effect waves-light">
+    		
+    		<i class="mdi mdi-exit-to-app tooltipped" data-tooltip="Entrada de Materiais" data-position="right"></i>Entrada de Materiais
+    	</a>
+    </li>
+    
+    <li>
+    	<a th:href="@{/saida/listar}" 
+    		th:classappend="(${currentPage} == 'saida')? sidenav-active"
+    		class="waves-effect waves-light">
+    		
+    		<i class="mdi mdi-export tooltipped" data-tooltip="Saída de Materiais" data-position="right"></i>Saída de Materiais
+    	</a>
+    </li>
+
+	<li>
+		<a th:href="@{/setor/listar}"
+		   th:classappend="(${currentPage} == 'setor')? sidenav-active"
+		   class="waves-effect waves-light">
+
+			<i class="mdi mdi-city tooltipped" data-tooltip="Setores" data-position="right"></i>Setores
+		</a>
+	</li>
+	<li>
+		<a th:href="@{/fornecedor/listar}"
+		   th:classappend="(${currentPage} == 'fornecedor')? sidenav-active"
+		   class="waves-effect waves-light">
+
+			<i class="mdi mdi-truck-delivery tooltipped" data-tooltip="Fornecedores" data-position="right"></i>Fornecedores
+		</a>
+	</li>
+	<li>
+		<a th:href="@{/grupoMaterial/listar}"
+		   th:classappend="(${currentPage} == 'grupoMaterial')? sidenav-active"
+		   class="waves-effect waves-light">
+
+			<i class="material-icons tooltipped" data-tooltip="Grupos de Materiais" data-position="right">equalizer</i>Grupos de Materiais
+		</a>
+	</li>
+	<li>
+		<a th:href="@{/unidadeMedida/listar}"
+		   th:classappend="(${currentPage} == 'unidadeMedida')? sidenav-active"
+		   class="waves-effect waves-light">
+
+			<i class="material-icons tooltipped" data-tooltip="Unidades de Medida" data-position="right">straighten</i>Unidades de Medida
+		</a>
+	</li>
+  
+    <li>
+    	<a th:href="@{/relatorio/listar}" 
+    		th:classappend="(${currentPage} == 'relatorio')? sidenav-active" 
+    		class="waves-effect waves-light">
+    		
+    		<i class="mdi mdi-file-chart tooltipped" data-tooltip="Relatórios" data-position="right"></i>Relatórios
+    	</a>
+    </li>
+	<li>
+		<a th:href="@{/usuario/listar}"
+		   th:classappend="(${currentPage} == 'usuario')? sidenav-active"
+		   class="waves-effect waves-light">
+			<i class="mdi mdi-account-multiple tooltipped" data-tooltip="Usuários" data-position="right"></i>Usuários
+		</a>
+	</li>
+    
+    <li><div class="divider blue-grey darken-3"></div></li>
+    
+    <li><a th:href="@{/logout}" class="waves-effect waves-light">Sair</a></li>
+    
+</ul>

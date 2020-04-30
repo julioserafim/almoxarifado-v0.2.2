@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base" th:with="currentPage='relatorio'">
+
+<head>
+<title>Clínicas - Relatótrio Estoque Entrada e Saída</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/relatorio/relatorio.css}" />
+</head>
+
+<body class="grey lighten-3">
+	<section layout:fragment="conteudo">
+		<div class="row">
+			<div class="col s12 breadcrumbs valign-wrapper">
+				<a th:href="@{/}" class="breadcrumb blue-grey-text"> <i
+					class="material-icons left">home</i>
+				</a> <a th:href="@{/relatorio/listar}" class="breadcrumb blue-grey-text">Relatórios</a>
+
+				<a class="breadcrumb blue-grey-text">Estoque Entrada e Saída</a>
+			</div>
+			<div class="col s12">
+				<div class="row">
+					<form id="form-busca" class="card"
+						th:action="@{/relatorio/estoqueEntradaSaidaSetor}" method="post">
+						<div class="card-content">
+							<div class="row">
+								<div class="input-field col l6 m6 s12">
+									<input id="inicio"
+										th:value="${inicio} ? ${#dates.format(inicio, 'dd/MM/yyyy')} : ''"
+										name="inicio" type="text" data-mask="00/00/0000" /> <label
+										for="inicio">A partir do dia</label>
+								</div>
+								<div class="input-field col l6 m6 s12">
+									<input id="fim"
+										th:value="${fim} ? ${#dates.format(fim, 'dd/MM/yyyy')} : ''"
+										name="fim" type="text" data-mask="00/00/0000" /> <label
+										for="fim">Até o dia</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col l12 m12 s12">
+									<label for="setor">Escolha um Setor:</label> <select id="setor"
+										name="idSetor">
+										<option th:value="-1">Selecione um Setor</option>
+
+										<option th:each="set: ${setores}" th:value="${set.id}"
+											th:text="${set.nome}" th:selected="${set.id == setor?.id}">
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="card-action right-align">
+							<button type="submit" class="btn waves-effect waves-light">
+								<i class="material-icons">search</i>
+							</button>
+						</div>
+					</form>
+				</div>
+				<div class="row" th:if="${setor != null}">
+					<!-- BEGIN CARD -->
+					<div class="card">
+
+						<button
+							class="download-pdf-button btn-floating btn-large tooltipped"
+							data-tooltip="Baixar em PDF">
+							<i class="material-icons">picture_as_pdf</i>
+						</button>
+
+						<div class="card-content">
+
+							<div class="row no-margin no-padding">
+								<div class=" col s6">
+									<span
+										class="bold-text text-14 grey-text text-darken-3 truncate">Setor</span>
+									<span class="light-text text-24 grey-text text-darken-3">
+
+										<span id="nomeSetor" th:text="${setor.nome}"
+										class="val-nome-setor">Setor de Vendas</span> <span
+										th:if="${setor.geral}">-</span> <span th:if="${setor.geral}"
+										class="val-geral-setor bold-text text-24 green-text text-lighten-1">GERAL</span>
+									</span>
+
+								</div>
+
+								<div class="col s6 no-padding">
+									<span class="bold-text text-14 grey-text text-darken-3">Código</span>
+									<span id="codigoSetor" th:text="${setor.codigo}"
+										class="val-codigo-setor light-text text-24 grey-text text-darken-3 truncate">45687654145354</span>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<div class="card">
+						<div class="card-content">
+							<a class="card-title light-text text-24 grey-text text-darken-3">Materiais</a>
+						</div>
+						<div class="card-content" th:if="${#lists.isEmpty(estoques)}">
+							<span class="bold blue-grey-text"
+								th:text="'Nenhum material desse setor foi encontrado!'"></span>
+						</div>
+						<table id="table-material"
+							class="datatable table-hover table-lite table-card"
+							th:unless="${#lists.isEmpty(estoques)}">
+
+							<thead>
+								<tr>
+									<th>Material</th>
+									<th>Estoque</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr th:each="estoque : ${estoques}" th:if="${estoque.material}"
+									class="val-material">
+									<td th:text="${estoque.material.nome}"
+										class="val-nome-material max-width-200"></td>
+									<td th:text="${estoque.material.estoque}"
+										class="val-estoque-material"></td>
+								</tr>
+							</tbody>
+
+							<!-- Fim Lista de Materiais -->
+
+						</table>
+					</div>
+					<div class="card">
+						<div class="card-content">
+							<a class="card-title light-text text-24 grey-text text-darken-3">Entradas</a>
+						</div>
+						<div class="card-content" th:if="${#lists.isEmpty(entradas)}">
+							<span class="bold blue-grey-text"
+								th:text="'Nenhuma entrada para esse setor foi encontrada!'"></span>
+						</div>
+						<table id="table-entradas" th:unless="${#lists.isEmpty(entradas)}"
+							layout:fragment="table"
+							class="datatable table-hover table-lite table-card"
+							data-filter="#table-filter" data-sort-col="0,1,2"
+							data-sort-direction="asc,asc,asc">
+
+							<thead>
+								<tr>
+									<th>Data</th>
+									<th class="hide-on-small-only">Tipo</th>
+									<th class="hide-on-small-only">Responsável</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="entrada:${entradas}" class="val-entradas">
+									<td class="val-entrada-data"><a
+										th:href="@{${'/entrada/'+entrada.id+'/visualizar'}}"
+										style="padding: 15px;"><span
+											th:text="${#calendars.format(entrada.chegada,'dd/MM/yyyy')}"
+											class="val-data-entradas vertical-time-line-date">03/11/1994</span></a></td>
+									<td class="val-entrada-tipo hide-on-small-only"
+										th:text="${entrada.tipo.descricao}"></td>
+									<td class="val-entrada-responsavel hide-on-small-only"
+										th:text="${entrada.responsavel.nome}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="card">
+						<div class="card-content">
+							<a class="card-title light-text text-24 grey-text text-darken-3">Saídas</a>
+						</div>
+						<div class="card-content" th:if="${#lists.isEmpty(saidas)}">
+							<span class="bold blue-grey-text"
+								th:text="'Nenhuma saída desse setor foi encontrada!'"></span>
+						</div>
+						<table id="table-saidas" th:unless="${#lists.isEmpty(saidas)}"
+							layout:fragment="table"
+							class="datatable table-hover table-lite table-card"
+							data-filter="#table-filter" data-sort-col="0,1,2"
+							data-sort-direction="asc,asc,asc">
+
+							<thead>
+								<tr>
+									<th>Data</th>
+									<th class="hide-on-small-only">Tipo</th>
+									<th class="hide-on-small-only">Destino</th>
+									<th class="hide-on-small-only">Responsável</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="saida:${saidas}" class="val-saidas">
+									<td class="val-saida-data"><a
+										th:href="@{${'/saida/'+saida.id+'/visualizar'}}"
+										style="padding: 15px;"><span
+											th:text="${#calendars.format(saida.data,'dd/MM/yyyy')}"
+											class="val-data-saidas vertical-time-line-date">03/11/1994</span></a></td>
+									<td class="val-saida-tipo hide-on-small-only"
+										th:text="${saida.tipo.descricao}"></td>
+									<td class="val-saida-destino hide-on-small-only"
+										th:text="${saida.destino == null ? '-': saida.destino.nome }"></td>
+									<td class="val-saida-responsavel hide-on-small-only"
+										th:text="${saida.responsavel.nome}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section layout:fragment="js">
+		
+		<script type="text/javascript" th:src="@{/material-clinicas/plugins/datatables/dataTables.buttons.min.js}"></script>
+		<script type="text/javascript" th:src="@{/material-clinicas/plugins/datatables/jszip.min.js}"></script>
+		<script type="text/javascript" th:src="@{/material-clinicas/plugins/datatables/buttons.html5.min.js}"></script>
+		
+		<script type="text/javascript"
+			th:src="@{/material-clinicas/plugins/pdf/pdfmake.min.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/material-clinicas/plugins/pdf/vfs_fonts.js}"></script>
+		<script type="text/javascript" th:src="@{/js/relatorio/relatorio.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/js/relatorio/estoque-entrada-saida-setor.js}"></script>
+
+	</section>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base-listar"
+	th:with="
+    		currentPage = 'usuario', 
+    		
+    		list = ${usuarios},
+    		emptyListMessage = 'Nenhum usuário cadastrado!',
+    		
+    		addEnabled = true, 
+    		addTip = 'Adicionar um usuário', 
+    		addLink = @{/usuario/adicionar/},
+    		
+    		breadcrumbName = 'Usuários', 
+    		filterEnabled = true, 
+    		filterName = 'Buscar usuários'">
+
+<head>
+<title>Clínicas - Usuário</title>
+</head>
+
+<table layout:fragment="table" data-sort-col="0,1,2"
+	data-sort-direction="asc,desc,desc">
+
+	<thead>
+		<tr>
+
+			<th>Nome</th>
+			<th class="hide-on-small-only">Email</th>
+			<th class="hide-on-small-only">Siape</th>
+			<th class="hide-on-med-and-down">Cargo</th>
+			<th class="hide-on-med-and-down">Habilitar</th>
+			<th class="hide-on-med-and-down">Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="usuario: ${list}"
+			th:with="
+	    		editTip = 'Editar', 
+	    		editLink = @{/usuario/editar/{id}(id=${usuario.id})},
+	    		
+	    		removeTip = 'Remover',
+	    		removeLink = @{/usuario/remover/{id}(id=${usuario.id})}, 
+	    		removeClass = 'confirm'
+       		"
+			>
+
+			<td th:text="${usuario.nome}"></td>
+			<td class="hide-on-small-only" th:text="${usuario.email}"></td>
+			<td class="hide-on-small-only" th:text="${usuario.siape}"></td>
+			<td class="hide-on-med-and-down" th:text="${usuario.cargo}"></td>
+			<td class="hide-on-med-and-down">
+				<div class="switch">
+					<label><input type="checkbox" class="habilitar"
+						th:id="${usuario.id}" th:checked="${usuario.habilitado}" /> <span
+						class="lever"></span> </label>
+				</div>
+			</td>
+			<td class="hide-on-med-and-down action">
+				<div class="valign-wrapper center">
+			   		<a class="btn-icon waves-effect tooltipped"
+			     		th:href="${editLink}"
+			     		th:attr="data-tooltip=${editTip}, data-target=${editDataTarget}, data-url=${editDataUrl}"
+			     		th:classappend="${editClass}" >
+			     		<i class="material-icons">edit</i>
+					</a>
+
+			   		<a  class="btn-icon waves-effect tooltipped"
+			     		th:href="${removeLink}"
+			     		th:attr="data-tooltip=${removeTip}, data-target=${removeDataTarget}, data-url=${removeDataUrl}"
+			     		th:classappend="${removeClass}" >
+			     		<i class="material-icons">delete</i>
+					</a>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<section layout:fragment="js">
+	<script type="text/javascript"
+		th:src="@{/js/usuario/usuario_habilitado.js}"></script>
+</section>
+
+
+
+
+</html>

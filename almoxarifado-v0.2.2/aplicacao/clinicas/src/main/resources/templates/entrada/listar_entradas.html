@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base-listar"
+    th:with="
+    		currentPage = 'entrada', 
+    		
+    		list = ${entradas},
+    		emptyListMessage = 'Nenhuma entrada cadastrada!',
+    		
+    		addEnabled = true,
+    		addTip = 'Adicionar uma entrada',
+    		addLink = @{/entrada/adicionar/},
+    		
+    		breadcrumbName = 'Entradas', 
+    		filterEnabled = true, 
+    		filterName = 'Buscar entradas'" >
+
+<head>
+    <title>Clínicas - Entradas</title>
+</head>
+
+<table 
+	layout:fragment="table">
+		
+   <thead>
+       <tr>
+           <th>Data de Chegada</th>
+           <th class="hide-on-small-only">Tipo</th>
+           <th class="hide-on-small-only">Estado da Entrada</th>
+           <th class="hide-on-med-and-down">Responsável</th>
+           <th class="hide-on-med-and-down"></th>
+       </tr>
+   </thead>				 
+   <tbody>
+       <tr th:each="entrada: ${entradas}">
+           <td th:text="${#calendars.format(entrada.chegada,'dd/MM/yyyy')}"></td>
+           <td class="hide-on-small-only" th:text="${entrada.tipo?.descricao}"></td>
+           <td class="hide-on-small-only bold" th:text="${entrada.statusEntrada?.descricao}"
+           	th:classappend="${entrada.statusEntrada?.descricao=='FINALIZADA'} ? blue-text : deep-orange-text"></td>
+           <td class="hide-on-med-and-down" th:text="${entrada.responsavel?.nome}"></td>
+           <td class="hide-on-med-and-down action">
+           		<div class="valign-wrapper center">
+                    <a class="btn-icon waves-effect tooltipped" th:attr="data-tooltip='Visualizar Entrada'"
+                       th:href="@{/entrada/__${entrada.id}__/visualizar}">
+                        <i class="material-icons">search</i>
+                    </a>
+                    <a th:if="${(entrada != null and entrada.statusEntrada.descricao != 'FINALIZADA')}" class="btn-icon waves-effect tooltipped"
+           				th:attr="data-tooltip='Editar Entrada'"
+			     		th:href="@{/entrada/{id}/editar/(id=${entrada.id})}">
+			     		<i class="material-icons">edit</i>
+					</a>
+           		</div>
+           </td>
+       </tr>					        
+   </tbody>
+</table>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='saida'">
+<head>
+	<title>Clínicas - Visualizar Saída</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/clinicas.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/saida.css}"/>
+</head>
+
+<body class="grey lighten-3">
+	<section layout:fragment="conteudo">
+		<div class="row">
+			<div class="col s12 breadcrumbs valign-wrapper">
+				<a th:href="@{/}" class="breadcrumb blue-grey-text"> <i class="material-icons left">home</i> </a> 
+				<a th:href="@{/saida/listar}" class="breadcrumb blue-grey-text">Saída</a>
+				<a class="breadcrumb blue-grey-text">Visualizar Saída</a>
+			</div>
+
+			<div class="col s12">
+				<div class="row">
+					<div class="card">
+						<div class="card-image brown lighten-1 center-align">
+							<a class="card-title-large blue-grey-text text-lighten-5">Informações da Saída</a>
+						</div>
+						<div class="card-content">
+							<div class="row no-margin">
+								<input id="saida-id" type="hidden" th:value="${saidaMaterial.id}"/>
+								<input id="setor-origem-id" type="hidden" th:value="${saidaMaterial.origem.id}"/>
+								<div class="col l4 m6 s12">Tipo de Saida: 
+									<span th:text="${saidaMaterial.tipo.descricao}" 
+										class="light-text pregao truncate text-18 data-entrega"></span></div>
+								<div class="col l4 m6 s12">Data:
+									<span th:text="${saidaMaterial.data!= null ? #calendars.format(saidaMaterial.data,'dd/MM/yyyy') : ''}" 
+										class="light-text pregao truncate text-18 data-entrega"></span></div>
+								<div class="col l4 m6 s12">Responsável: 
+									<span th:text="${saidaMaterial.responsavel.nome}" class="light-text pregao truncate text-18" ></span></div>						
+							</div>
+						</div>						
+						<div class="divider" ></div>
+						<div class="card-content">
+							<div class="row no-margin">
+								<div class="col l4 m6 s12">Status: 
+									<span th:text="${saidaMaterial.status.descricao}" class="light-text pregao truncate text-18" ></span></div>						
+								<div class="col l4 m6 s12">Setor de Origem: 
+									<span th:text="${saidaMaterial.origem.nome}" class="light-text pregao truncate text-18" ></span></div>
+								<div class="col l4 m6 s12" th:if="${saidaMaterial.tipo.descricao == 'SETOR'}">Setor de Destino: 
+									<span th:text="${saidaMaterial.destino.nome}" class="light-text pregao truncate text-18" ></span></div>
+							</div>
+						</div>
+						<div class="divider"></div>
+						<div class="card-content">
+							<div class="row no-margin">
+								<div class="col l12 m12 s12">								
+									Observações:
+									<span class="comentario light-text truncate text-18" th:text="${saidaMaterial.observacao}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<form class="card">
+						<div class="card-image brown lighten-1 center-align">
+							<a class="card-title-large blue-grey-text text-lighten-5">Saída de Materiais Para setor</a>
+						</div>
+				
+						<div class="divider"></div>
+						
+						<div class="card-content">
+							
+							<div class="row">
+								<input id="material-id" type="hidden" />
+								<input id="setor-id" type="hidden" th:value="${saidaMaterial.origem.id}"/>
+								
+			                    <div class="col l8 m6 s12 input-field input-field-cbarras">
+	                                <label for="cbarras" >Material<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	                                <input autocomplete="off" id="cbarras" type="text" class="autocomplete cbarras-autocomplete" required="required"/><br/>
+	                            </div>
+	                            
+	                            <div class="col l4 m6 s12 input-field">
+	                                <label for="quantidade" >Quantidade<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	                                <input id="quantidade" type="number" min="0" required="required"/><br/>
+	                            </div>
+			                </div>
+
+						</div>
+						
+						<div class="card-action grey lighten-4 ">
+		                    <button  disabled="disabled" type="submit" value="exit"
+		                    	class="btn-floating btn-large waves-effect waves-light white-text dynamic-list-add top-right tooltipped"
+		                    	data-delay="700" data-tooltip="Incluir este material na saída para esta setor">
+		                    	<i class="material-icons">add</i>
+		                    </button>
+		                    
+		                    <div class="rounded-info-wrapper row no-margin">
+		                    	<input type="hidden" id="estoque-lote-id" />
+			                    <!-- <div class="col s6 truncate rounded-info rounded-info-hide grey lighten-4 blue-grey-text z-depth-1-2">Produto: <span class="nome-material"></span></div>
+			                    <div class="col s4 truncate rounded-info rounded-info-hide grey lighten-4 blue-grey-text z-depth-1-2">Lote: <span class="lote-material"></span></div>
+			                    <div class="col s4 truncate rounded-info rounded-info-hide grey lighten-4 blue-grey-text z-depth-1-2">Data de validade: <span class="validade-material"></span></div>
+			                    <div class="col s4 truncate rounded-info rounded-info-hide grey lighten-4 blue-grey-text z-depth-1-2">Código interno: <span class="codigo-interno-material"></span></div>
+			                    <div class="col s4">
+			                    	<div class="truncate rounded-info rounded-info-hide grey lighten-4 blue-grey-text z-depth-1-2">Estoque: <span class="estoque-material"></span></div>
+			                    </div> -->
+			                </div>
+		                    
+		                    
+		                    <div class="row no-margin">
+	                            <div class="col s12">
+	                            	
+				                    <table class="dynamic-list">
+				                    	<thead>
+				                    		<tr>
+				                    			<th class="center-align">Material</th>
+				                    			<th class="center-align">Código interno</th>
+				                    			<th class="center-align">Lote</th>
+				                    			<th class="center-align">Quantidade</th>
+				                    			<th></th>
+				                    		</tr>
+				                    	</thead>
+				                    	<tbody class="dynamic-list-container">
+					                    	
+					                    	<tr class="dynamic-list-element material-items">
+					                    		<input class="item-saida-id" type="hidden" />
+					                    		<td class="center-align material"></td>
+					                    		<td class="center-align codigo-interno"></td>
+					                    		<td class="center-align lote"></td>
+					                    		<td class="center-align quantidade-disciplina">0000</td>
+
+					                    		<td class="right-align">
+					                    			<button type="button"  
+						                    			class="btn-floating z-depth-0 waves-effect grey lighten-4 dynamic-list-remove"><i class="material-icons blue-grey-text">delete</i></button>
+					                    		</td>
+					                    	</tr>
+					                    </tbody>
+				                    	
+				                    </table>	                    
+			                  	</div>
+			            	</div>
+		                </div>
+						
+					</form>
+         			<div class="col s12 right-align card-action">
+         				<a type="button" class="btn-flat waves-effect white cyan-text waves-light" th:href="@{/saida/{id}/excluir(id=${saidaMaterial.id})}">Excluir</a>			
+		            	<a id="btn-finalizar-saida" class="btn waves-effect waves-light" th:href="@{/saida/{id}/finalizar(id=${saidaMaterial.id})}">Finalizar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<section layout:fragment="js">
+		<script th:src="@{/material-clinicas/js/dynamic-list.js}"></script>
+		<script type="text/javascript" th:src="@{/material-clinicas/plugins/autocomplete/jquery.materialize-autocomplete.js}"></script>
+		<script type="text/javascript" th:src="@{/js/saida/saida.js}"></script>
+		<script type="text/javascript" th:src="@{/js/clinicas.js}"></script>
+	</section>
+	
+</body>
+</html>

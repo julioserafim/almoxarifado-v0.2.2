@@ -1,0 +1,114 @@
+<section th:fragment="entrada_header">
+	<div class="row">
+		<div class="card">
+			<div class="card-image blue-grey lighten-1 center-align">
+				<a class="card-title-large blue-grey-text text-lighten-5">Informações
+					da Entrada</a>
+			</div>
+
+			<div class="">
+				<div class="card-content">
+					<div class="row no-margin">
+						<div class="col l3 m6 s12">
+							<span class=" bold"> Data de Entrega: </span> <span
+								th:text="${entrada.chegada != null ? #calendars.format(entrada.chegada,'dd/MM/yyyy') : ''}"
+								class="pregao truncate text-18 data-entrega"></span>
+						</div>
+						<div class="col l3 m6 s12">
+							<span class="bold">Tipo de Entrada:</span> <span
+								th:text="${entrada.tipo.descricao}"
+								class="  pregao truncate text-18 data-entrega"></span>
+						</div>
+						<div class="col l3 m6 s12">
+							<span class="bold">Responsável:</span> <span
+								th:text="${entrada.responsavel != null}? ${entrada.responsavel.nome}:'-'"
+								class="  pregao truncate text-18"></span>
+						</div>
+						<div class="col l3 m6 s12"
+							th:if="${entrada.tipo.descricao == 'DEVOLUÇÃO'}">
+							<span class="bold">Setor de Origem:</span> <span
+								th:text="${entrada.setor != null}? ${entrada.setor.nome}:'-'"
+								class="  pregao truncate text-18"></span>
+						</div>
+					</div>
+				</div>
+				<div class="divider" th:if="${entrada.tipo.descricao == 'FORNECEDOR'}"></div>
+				<div class="card-content"
+				th:if="${entrada.tipo.descricao == 'FORNECEDOR'}">
+					<div class="row no-margin">
+						<div class="col l3 m6 s12">
+							<span class="bold">Pregão:</span> <span
+								th:text="${entrada.pregao != ''}? ${entrada.pregao}:'-'"
+								class="  pregao truncate text-18"></span>
+						</div>
+						<div class="col l3 m6 s12">
+							<span class="bold">Nota de Empenho:</span> <span
+								th:text="${entrada.empenho != ''}? ${entrada.empenho}:'-'"
+								class="  pregao truncate text-18 nota-empenho"></span>
+						</div>
+						<div class="col l3 m6 s12">
+							<span class="bold">Licitação:</span> <span
+								th:text="${entrada.licitacao != ''}? ${entrada.licitacao}:'-'"
+								class="  pregao truncate text-18 licitacao"></span>
+						</div>
+						<div class="col l3 m6 s12">
+							<span class="bold">Processo de Licitação:</span> <span
+								th:text="${entrada.processoLicitacao != ''}? ${entrada.processoLicitacao}:'-'"
+								class="processo-licitacao   pregao truncate text-18"></span>
+						</div>
+					</div>
+				</div>
+				<div class="divider" th:if="${entrada.tipo.descricao == 'FORNECEDOR'}"></div>
+				<div class="card-content"
+				th:if="${entrada.tipo.descricao == 'FORNECEDOR'}">
+				<div class="row no-margin">
+					<div class="col l3 m6 s12">
+						<span class="bold">Nota Fiscal:</span> <span
+							th:text="${entrada.notaFiscal != ''}? ${entrada.notaFiscal}:'-'"
+							class="nota-fiscal   pregao truncate text-18"></span>
+					</div>
+					<div class="col l3 m6 s12">
+						<span class="bold">Fornecedor:</span> <span
+							th:text="${entrada.fornecedor != null} ? ${entrada.fornecedor.razaoSocial}:'-'"
+							class="fornecedor   pregao truncate text-18"></span>
+					</div>
+					<div class="col l3 m6 s12">
+						<span class="bold">Data de Emissão da Nota Fiscal:</span> <span
+							th:text="${entrada.emissaoNotaFiscal != null ? #calendars.format(entrada.emissaoNotaFiscal,'dd/MM/yyyy'): '-'}"
+							class="data-emissao-nota-fiscal   pregao truncate text-18"></span>
+					</div>
+					<div class="col l3 m6 s12">
+						<span class="bold">Valor Total:</span> <span
+							th:if="${entrada.valorNotaFiscal != null}"
+							th:text="'R$ '+${#numbers.formatDecimal(entrada.valorNotaFiscal, 0, 'POINT', 2, 'COMMA')}"
+							class="valor-total pregao truncate text-18"></span>
+					</div>
+
+				</div>
+				</div>
+				<div class="divider"></div>
+				<div class="card-content">
+				<div class="row no-margin">
+					<div class="col l6 m6 s12">
+						<span class="bold">Estado da Entrada:</span> <span
+							th:text="${entrada.statusEntrada.descricao}"
+							class="nota-fiscal pregao   truncate text-18"
+							th:classappend="${entrada.statusEntrada.descricao=='FINALIZADA'} ? blue-text : deep-orange-text"></span>
+					</div>
+				</div>
+				</div>
+				
+				<div class="divider"></div>
+				<div class="card-content">
+					<div class="row no-margin">
+						<div class="col l6 m6 s12">
+							<span class="bold">Observações: </span>
+							 <span class="comentario light-text truncate text-18"
+								th:text="${entrada.observacao}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+</section>

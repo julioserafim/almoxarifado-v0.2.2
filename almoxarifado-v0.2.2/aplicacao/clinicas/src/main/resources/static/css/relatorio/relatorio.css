@@ -1,0 +1,122 @@
+.border-right {
+	
+}
+
+ul.vertical-time-line {
+	margin: 0;
+	padding-bottom: 16px;
+	
+	border-left-weight: 3px;
+	border-left-style: solid;
+}
+
+ul.vertical-time-line > li {
+	padding-left: 20px;
+}
+
+ul.vertical-time-line .vertical-time-line-date {
+	font-size: 18px;
+	line-height: 52px;
+	display: block;
+	
+}
+ 
+ul.vertical-time-line .vertical-time-line-date:before {
+	position: absolute;
+	content: "";
+	font-size: 32px;
+	line-height: 48px;
+	margin-top: 14px;
+	margin-left: -33px;
+	
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	box-shadow: 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 1px 0 rgba(0, 0, 0, 0.07), 0 2px 1px -1px rgba(0, 0, 0, 0.06);
+	
+	transition: all .1s linear;
+}
+
+ul.vertical-time-line .vertical-time-line-date:hover:before {
+	width: 30px;
+	height: 30px;
+	margin-top: 12px;
+	margin-left: -36px;
+	margin-right: 10px;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+ul.vertical-time-line.vertical-time-line-left { border-color: #2196f3; } 
+ul.vertical-time-line.vertical-time-line-left .vertical-time-line-date { color: #2196f3; } 
+ul.vertical-time-line.vertical-time-line-left .vertical-time-line-date:before { background-color: #2196f3; }
+
+ul.vertical-time-line.vertical-time-line-right { border-color: #ff9800; } 
+ul.vertical-time-line.vertical-time-line-right .vertical-time-line-date { color: #ff9800; } 
+ul.vertical-time-line.vertical-time-line-right .vertical-time-line-date:before { background-color: #ff9800; }
+
+.date-interval-selector input {
+	border: none;
+	margin: 0;
+	line-height: 36px;
+	width: 118px;
+	text-align: center;
+	display: inline-block;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.date-interval-selector input:hover {
+	width: 128px;	
+}
+
+.date-interval-selector:hover {
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+.date-interval-selector {
+	width: auto;
+	line-height: 36px;
+	display: inline-block;	
+	cursor: pointer;
+	transition: all .2s linear;
+}
+
+.date-interval-selector-top {
+	border-radius: 24px 24px 24px 0px;
+}
+
+.date-interval-selector-bottom {
+	border-radius: 0px 24px 24px 24px;	
+}
+
+.date-interval-selector-center {
+	border-radius: 24px;	
+}
+
+.row {
+	margin-bottom: 16px;
+}
+
+.code-icon {
+	margin-right: 8px;
+}
+
+.pdf-page * {
+	font-family: Arial;
+}
+
+.download-pdf-button {
+	position: absolute;
+	top: -26px;
+	right: 26px;
+}
+
+.download-excel-button {
+	position: absolute;
+	top: -26px;
+	right: 95px;
+}
+
+.card-shadow-hover:hover {
+	box-shadow: 0 1px 8px 0 rgba(0,0,0,.2),0 3px 4px 0 rgba(0,0,0,.14),0 3px 3px -2px rgba(0,0,0,.12);
+}

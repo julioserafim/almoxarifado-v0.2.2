@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='saida'">
+<head>
+	<title>Clínicas - Visualizar Saída</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/clinicas.css}"/>
+</head>
+
+<body class="grey lighten-3">
+	<section layout:fragment="conteudo">
+		<div class="row">
+			<div class="col s12 breadcrumbs valign-wrapper">
+				<a th:href="@{/}" class="breadcrumb blue-grey-text"> <i class="material-icons left">home</i> </a> 
+				<a th:href="@{/saida/listar}" class="breadcrumb blue-grey-text">Saída</a>
+				<a class="breadcrumb blue-grey-text">Visualizar Saída</a>
+			</div>
+
+			<div class="col s12">
+				<div class="row">
+					<div class="card">
+						<div class="card-image brown lighten-1 center-align">
+							<a class="card-title-large blue-grey-text text-lighten-5">Informações da Saída</a>
+						</div>
+						<div class="card-content">
+							<div class="row no-margin">
+								<div class="col l4 m6 s12">
+									Tipo:
+									<span class="tipo light-text truncate text-18" th:text="${saida.tipo.descricao}"></span>
+								</div>
+								<div class="col l4 m6 s12">
+									Data:
+									<span class="data light-text truncate text-18" th:text="${#calendars.format(saida.data,'dd/MM/yyyy')}" ></span>
+								</div>
+								<div class="col l4 m6 s12">
+									Origem: 
+									<span class="origem light-text truncate text-18" th:text="${saida.origem.nome}"></span>
+								</div>
+							</div>							
+						</div>
+						<div class="divider"></div>
+						<div class="card-content">
+							<div class="row no-margin">
+								<div class="col l4 m6 s12">
+									Destino: 
+									<span class="destino light-text pregao truncate text-18" th:text="${saida.origem.nome}" ></span>
+								</div>
+								<div class="col l4 m6 s12">									
+									Responsável: 
+									<span class="responsavel light-text pregao truncate text-18" th:text="${saida.responsavel.nome}"></span>
+								</div>
+								<div class="col l4 m6 s12">
+									Status: 
+									<span class="estado bold-text truncate text-18 cyan-text" th:text="${saida.status.descricao}"></span>								
+								</div>
+							</div>
+						</div>
+						<div class="divider"></div>
+						<div class="card-content">
+							<div class="row no-margin">
+								<div class="col l12 m12 s12">								
+									Observações:
+									<span class="comentario light-text truncate text-18" th:text="${saida.observacao}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="table-datatables card">
+						<div class="card-image brown lighten-1 center-align">
+							<a class="card-title-large blue-grey-text text-lighten-5">Materiais da Saída</a>
+						</div>
+						<div class="card-content">
+							<table id="table-material" class="striped display" cellspacing="0">
+								<thead>
+									<tr>
+										<th>Material</th>
+										<th>Quantidade</th>
+										<th>Lote</th>
+									</tr>
+								</thead>
+								<tbody >
+									<tr th:each="item:${saida.itens}">
+										<td><span class="material" th:text="${item.material.nome}"></span></td>
+										<td><span class="quantidade" th:text="${item.quantidade}"></span></td>
+										<td><span class="lote" th:text="${item.lote}"></span></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section layout:fragment="js">
+	
+		<script type="text/javascript" th:src="@{/javascript/clinicas.js}"></script>	
+		<script type="text/javascript">		
+			$(document).ready(function() {	
+				var dataTable = mf_base.doAddDataTable($("#table-material"), 1, "desc");
+			});		
+		</script>
+		
+	</section>
+</body>
+</html>

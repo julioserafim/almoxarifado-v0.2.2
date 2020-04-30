@@ -1,0 +1,56 @@
+.row.no-margin {
+	margin: 0;
+}
+
+.row p {
+	line-height: 1.2rem;
+}
+
+.collapsible-body .row {
+	padding: 24px;
+}
+
+.collapsible-head {
+	padding-left: 38px;
+	padding-right: 38px;
+}
+
+.card-action label {
+	margin-left: 20px;
+}
+
+.btn-floating-search {
+	position: absolute;
+	top: -26px;
+	right: 26px;
+}
+
+.search-result-container {
+	padding-top: 16px !important;
+	padding-bottom: 16px !important;
+}
+
+.io-title {
+	font-weight: 300;
+	font-size: 20px;
+	display: block;
+}
+
+.tabs .indicator {
+	
+}
+
+.sample-circle {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+}
+
+.material-list {
+	overflow-y: scroll;
+	height: 300px;
+}
+
+.code-span {
+	max-width: 150px;
+}

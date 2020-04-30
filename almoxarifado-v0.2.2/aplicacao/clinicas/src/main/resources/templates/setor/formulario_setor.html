@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='setor'">
+
+<head>
+	<title>Clínicas - Cadastrar Setor</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	
+	<style type="text/css">
+	
+		.label-curso {
+			margin-left: 10px;
+		}
+	
+	</style>
+	
+</head>
+
+<body class="grey lighten-3"
+	th:with="acao_url=${acao == 'ADICIONAR'? 'adicionar' :'editar' }">
+	<section layout:fragment="conteudo">
+		<div class="row">
+		
+			<div class="col s12 breadcrumbs valign-wrapper">
+	            <a th:href="@{/}" class="breadcrumb blue-grey-text">
+	                <i class="material-icons left">home</i>
+	            </a>
+	            
+	            <a th:href="@{/setor/listar}" class="breadcrumb blue-grey-text">Setor</a>
+	            
+	            <a th:if="${acao == 'ADICIONAR'}" class="breadcrumb blue-grey-text">Cadastrar</a>
+	            <a th:if="${acao == 'EDITAR'}" class="breadcrumb blue-grey-text">Editar</a>
+	        </div>
+		
+			<div class="col s12">
+				<form action="#" class="card form_ajax" data-model="setor"
+							th:attr="data-action=${acao_url}" th:object="${setor}"
+							th:method="post" enctype="multipart/form-data">
+					
+					<div class="card-image deep-purple lighten-1 center-align">
+		        		<a th:if="${acao == 'ADICIONAR'}" class="card-title-large blue-grey-text text-lighten-5">Cadastrar Setor</a>
+	            		<a th:if="${acao == 'EDITAR'}" class="card-title-large blue-grey-text text-lighten-5">Editar Setor</a>
+					</div>
+					
+					<div class="card-content">
+						
+						<input type="hidden" th:field="*{id}" />
+						
+						<div class="row">
+						
+							
+				
+							
+							<div class="input-field col s6">
+								<label th:for="codigo">Código <span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span> :</label>
+								<input type="text" th:field="*{codigo}" required="required"/>
+							</div>
+							<div class="input-field col s6">
+								<label th:for="nome">Nome <span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span> :</label>
+								<input type="text" th:field="*{nome}" required="required" />
+							</div>
+							
+						</div>
+					</div>
+					
+					<div class="card-action right-align">
+		            	<a th:href="@{/setor/listar/}" type="button" class="btn-flat waves-effect">Cancelar</a>
+	                    <button th:if="${acao == 'ADICIONAR'}" type="submit" value="keep_add" class="btn waves-effect white-text">SALVAR E ADICIONAR OUTRO</button>
+                    	<button th:if="${acao == 'ADICIONAR'}" type="submit" value="exit" class="btn waves-effect white-text">SALVAR E SAIR</button>
+                    	<button th:if="${acao == 'EDITAR'}" type="submit" value="exit" class="btn waves-effect white-text">SALVAR</button>
+		            </div>
+					
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<section layout:fragment="js">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+		<script type="text/javascript">
+			$('.select-multiple').select2();
+		</script>
+		<script type="text/javascript" th:src="@{/js/clinicas.js}"></script>
+	</section>
+</body>
+</html>

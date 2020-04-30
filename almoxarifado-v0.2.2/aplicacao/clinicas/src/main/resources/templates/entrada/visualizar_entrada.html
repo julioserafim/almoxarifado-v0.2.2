@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="base/base"
+      th:with="currentPage='entrada'">
+
+<head>
+  <title>Clínicas - Visualizar Entrada</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/clinicas.css}"/>
+</head>
+
+<body class="grey lighten-3">
+<section layout:fragment="conteudo">
+  <div class="row">
+
+    <div class="col s12 breadcrumbs valign-wrapper">
+      <a th:href="@{/}" class="breadcrumb blue-grey-text"> <i class="material-icons left">home</i> </a>
+      <a th:href="@{/entrada/listar}" class="breadcrumb blue-grey-text">Entrada</a>
+      <a class="breadcrumb blue-grey-text">Visualizar Entrada</a>
+    </div>
+
+    <div class="col s12">
+      <div th:replace="entrada/entrada_header :: entrada_header" ></div>
+    </div>
+    <div class="col s12">
+
+
+
+
+      <!-- BEGIN MATERIAIS -->
+
+      <div class="row">
+
+        <div class="card z-depth-0">
+          <div class="card-image blue-grey lighten-1 center-align">
+            <a class="card-title-large blue-grey-text text-lighten-5">Itens da entrada</a>
+          </div>
+
+          <div class="card-content grey lighten-2">
+
+            <!-- BEGIN ITENS DA ENTRADA -->
+
+            <div
+                    th:each="item : ${entrada.itens}" class="card">
+
+              <div class="card-content">
+
+                <div class="row">
+                  <div class="col s9">
+                    <span class="light text-18" th:text="${item.material.nome} + ' /' + ${item.material.unidadeMedida?.nome}"></span>
+                  </div>
+                </div>
+
+                <div class="row no-margin">
+                  <div class="col s4">
+                    <span class="bold">Lote:</span>
+                    <span class="light text-18" th:text="${item.lote}"></span>
+                  </div>
+                  <div class="col s4">
+                    <span class="bold"> Validade: </span>
+                    <span class="light text-18" th:text="${item.validade != null ? #calendars.format(item?.validade,'dd/MM/yyyy') : ''}"></span>
+                  </div>
+                  <div class="col s4" th:if="${item.valorUnitario != null}">
+                    <span class="bold"> Valor Unitário: </span>
+                    <span class="light text-18" th:text="'R$ '+${#numbers.formatDecimal(item.valorUnitario, 0, 'POINT', 2, 'COMMA')}"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-content">
+                <!-- Começo Entradas -->
+                <div class="row no-margin">
+                  <div class="col s12">
+
+                    <table class="bordered">
+                      <thead>
+                      <tr>
+                        <th >Setor</th>
+                        <th >Total Alocado</th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr th:each="alocacao : ${item.alocacoes}">
+                        <td th:text="${alocacao.setor.nome}"></td>
+                        <td th:text="${alocacao.quantidade}"></td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- Fim Entradas -->
+
+              </div>
+            </div>
+
+            <!-- END ITENS DA ENTRADA -->
+
+          </div>
+        </div>
+
+      </div>
+      <!-- END MATERIAIS -->
+
+
+    </div>
+  </div>
+</section>
+</body>
+</html>

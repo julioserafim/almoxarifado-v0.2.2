@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="base/base">
+
+<head>
+    <title>Clínicas - Materiais</title>
+</head>
+
+
+
+<div layout:fragment="conteudo">
+    <div class="col s12 breadcrumbs valign-wrapper">
+        <a th:href="@{/}" class="breadcrumb blue-grey-text"> <i
+                class="material-icons left">home</i>
+        </a> <a class="breadcrumb blue-grey-text" th:text="Materiais"> </a>
+    </div>
+    <div class="card">
+        <div class="card-content">
+            <div class="row valign-wrapper">
+                <span>Buscar</span>
+                <div class="col l11 m10 s10 input-field">
+                    <label for="acmaterial">Material<span
+                            class="tooltipped red-text text-darken-2" data-delay="50"
+                            data-tooltip="Este campo é obrigatório.">*</span></label> <input
+                        id="acmaterial" type="text"
+                        class="busca-material-autocomplete" /> <br />
+                </div>
+            </div>
+            <div class="row valign-wrapper">
+                <div class="col l11 m10 s10">
+                    <ul id="lista-materiais-resultado-busca" class="resultado-busca-material"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="relative">
+            <a th:href="@{/material/adicionar/}"
+               th:attr="data-tooltip='Adicionar material'"
+               class="btn-floating btn-large bottom-right waves-effect waves-light tooltipped">
+                <i class="material-icons">add</i>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<section layout:fragment="js">
+    <script type="text/javascript"
+            th:src="@{/material-clinicas/plugins/autocomplete/jquery.materialize-autocomplete.js}"></script>
+
+    <script type="text/javascript" th:src="@{/js/material/listar.js}"></script>
+
+</section>
+
+</html>

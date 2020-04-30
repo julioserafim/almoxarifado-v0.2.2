@@ -1,0 +1,96 @@
+@CHARSET "UTF-8";
+
+/*
+ * Formulário incluir itens
+ */
+
+
+.escondido{
+ 	display: none;
+}
+
+.btn-floating.btn-large.btn-top-left {
+	position: absolute;
+	top: -28px;
+	right: 28px;
+}
+
+.dynamic-list {
+	margin-top: 24px;
+}
+
+.dynamic-list-element {
+    transition: all 0.4s cubic-bezier(0.87, -0.41, 0.19, 1.44);
+    opacity: 0.0;
+    transform: scale(0, 1);
+}
+
+.dynamic-list-added {
+    transform: scale(1, 1);
+    opacity: 1.0;
+}
+
+.dynamic-list-removed {
+    transform: scale(0, 0);
+    opacity: 0.0;
+}
+
+.total {
+	position: absolute;
+	top: -28px;
+	left: 28px;
+	height: 56px;
+	border-radius: calc(56px / 2);
+	padding: 0 20px;
+	
+	font-size: 20px;
+	font-weight: 300;
+	line-height: 56px;
+	display: inline;
+	
+	transition: 5s linear;
+	
+}
+
+.no-margin {
+	margin: 0;
+}
+
+.material-items * {
+	font-weight: 400 !important;
+	color: #666 !important;
+}
+
+.material-items td {
+	padding: 0;
+}
+
+.em-andamento {
+	font-weight: bold;
+	color: #ff3d00;
+}
+
+.finalizada {
+	font-weight: bold;
+	color: #1b5e20;
+}
+
+.ac-dropdown {
+	position: absolute;
+	margin-top: -16px;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	z-index: 1000;
+	background-color: #fff;
+}
+
+.ac-item {
+	padding: 16px 24px;
+}
+
+.ac-item:hover {
+	background-color: #efefef;
+}
+
+.ac-appender {
+	display: none;
+}

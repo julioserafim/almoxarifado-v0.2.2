@@ -1,0 +1,13 @@
+.material-item {
+	background-color: white;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 1px 0 rgba(0, 0, 0, 0.07), 0 2px 1px -1px rgba(0, 0, 0, 0.06);
+	height: 100%;
+}
+
+.input-field .prefix {
+	margin-top: 5px;
+}
+
+.no-margin-bottom {
+	margin-bottom: 0px !important;
+}

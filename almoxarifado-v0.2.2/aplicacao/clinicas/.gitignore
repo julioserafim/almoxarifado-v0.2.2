@@ -1,0 +1,6 @@
+/target/
+.idea/
+.tern-project
+*application-homo.properties
+*application-prod.properties
+/bin/

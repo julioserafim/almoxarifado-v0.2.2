@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+	
+		<title>Clínicas - Login</title>
+		
+		<!-- BEGIN META -->
+		
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Sistema de Gerenciamento de Estoque das Clínicas de Odontologia da UFC" />
+		
+		<!-- END META -->
+		
+		
+		<!-- BEGIN STYLESHEETS -->
+		
+		<link rel="stylesheet" th:href="@{/material-clinicas/materialize/fonts/icons/material-icons.css}"/>
+		<link rel="stylesheet" th:href="@{/material-clinicas/materialize/fonts/icons/material-icons-google.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/material-clinicas/materialize/css/materialize.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/material-clinicas/css/mf.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/material-clinicas/css/mf-helpers.css}"/>
+		
+		<link rel="stylesheet" type="text/css" th:href="@{/css/login/login.css}"/>
+		
+		<!-- END STYLESHEETS -->
+		
+		
+	</head>
+	
+	<body class="grey lighten-3">
+		<!-- MENSAGENS DE ALERTA -->
+	 	<div th:each="alert : ${alertas}" 
+			class="alert-message" 
+			th:attr="data-type=${alert.type},data-delay=${alert.delay}" 
+			th:text="${alert.message}"></div> 
+		
+		
+		<div class="login__background-top blue-grey darken-2"></div>
+		
+		<!-- BEGIN LOGIN SECTION -->
+		
+		<div class="login__card-wrapper valign-wrapper">
+			
+			<form class="login__card card" th:action="@{/login}" method="post">
+			
+				<div class="login__card-image card-image blue-grey">
+					<h5 class="thin">Sistema de Almoxarifado Clínicas de Odontologia UFC</h5>
+					
+					<!-- <i th:unless="${param.error}" class="login__card-image-icon material-icons cyan-text text-lighten-3">person</i>
+					<i th:if="${param.error}" class="login__card-image-icon mdi mdi-account-alert cyan-text text-lighten-3"></i> -->
+									
+				</div>
+				
+				<div class="login__card-content card-content valign-wrapper">
+					
+					<div class="row no-margin">
+						
+						<div class="col s12 col s12 red-text text-lighten-2 bold text-18 self-sampled center" th:if="${param.error}">
+							Login ou senha incorreta!
+						</div>
+						
+						<!-- INPUT USERNAME -->
+						<div class="input-field col s12">
+							<input id="username" name="username" type="text" class="validate"/>
+							<label for="username">Email</label>
+						</div>
+						
+						<!-- INPUT PASSWORD -->
+						<div class="input-field col s12">
+							<input id="password" name="password" type="password" class="validate" autocomplete="off"/>
+							<label for="password">Senha</label>
+						</div>
+						
+						<div class="col s12">
+							<!-- SIBMIT BUTTON -->
+							<button type="submit" class="btn-large block waves-effect waves-light">
+								Entrar
+							</button>
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="card-action right-align">
+					<a th:href="@{/usuario/recuperarSenha}" class="btn-flat waves-effect blue-grey-text">Recuperar Senha</a>
+					
+				</div>
+				
+			</form>
+			
+		</div>
+		<!--end .card -->
+		
+		<!-- END LOGIN SECTION -->
+	
+		<div class="mf-foreground white" ></div>
+		
+		<!-- BEGIN JAVASCRIPT -->
+		
+	    <script type="text/javascript" th:src="@{/material-clinicas/plugins/jquery/jquery-2.1.1.min.js}"></script>
+	    <script type="text/javascript" th:src="@{/material-clinicas/plugins/chart/chart.js}"></script>
+	    
+		<script type="text/javascript" th:src="@{/material-clinicas/materialize/js/bin/materialize.js}"></script>
+		<script type="text/javascript" th:src="@{/material-clinicas/js/mf.js}"></script>
+		
+		<section layout:fragment="js">
+		
+			<script type="text/javascript" th:src="@{/js/login/login.js}"></script>
+		
+		</section>
+		
+		<!-- END JAVASCRIPT -->
+	
+	</body>
+</html>
+

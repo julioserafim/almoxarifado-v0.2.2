@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base-listar"
+    th:with="
+    		currentPage = 'fornecedor', 
+    		
+    		list = ${fornecedores},
+    		emptyListMessage = 'Nenhum fornecedor cadastrado!',
+    		
+    		addEnabled = true, 
+    		addTip = 'Adicionar um fornecedor', 
+    		addLink = @{/fornecedor/adicionar/},
+    		
+    		breadcrumbName = 'Fornecedor', 
+    		filterEnabled = true, 
+    		filterName = 'Buscar fornecedores'" >
+
+<head>
+    <title>Clínicas - Fornecedores</title>
+</head>
+
+<table 
+	layout:fragment="table"
+	data-sort-col="0,1" data-sort-direction="asc,asc">
+	
+   <thead>
+       <tr>
+			<th>Razão Social</th>
+			<th>CNPJ</th>
+			<th></th>
+       </tr>
+   </thead>				 
+   <tbody>
+       <tr th:each="fornecedor:${list}">
+			<td th:text="${{fornecedor.razaoSocial}}"></td>
+			<td th:text="${{fornecedor.cnpj}}"></td>
+           	<td class="action">
+           		<div class="center">
+           			 <a class="btn-icon waves-effect tooltipped"
+           				th:attr="data-tooltip='Editar Fornecedor'"
+			     		th:href="@{/fornecedor/editar/{id}(id=${fornecedor.id})}">
+			     		<i class="material-icons">edit</i>
+					</a>
+					<a class="btn-icon waves-effect tooltipped"
+           				th:attr="data-tooltip='Remover Fornecedor'"
+			     		th:href="@{/fornecedor/remover/{id}(id=${fornecedor.id})}">
+			     		<i class="material-icons">delete</i>
+					</a>
+           		</div>
+           	</td>
+       </tr>					        
+   </tbody>
+</table>
+
+</html>

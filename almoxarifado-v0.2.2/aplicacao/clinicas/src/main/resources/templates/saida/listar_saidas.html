@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base-listar"
+    th:with="
+    		currentPage = 'saida', 
+    		
+    		list = ${saidas},
+    		emptyListMessage = 'Nenhuma saída cadastrada!',
+    		
+    		addEnabled = true, 
+    		addTip = 'Adicionar uma saída', 
+    		addLink = @{/saida/adicionar/},
+    		
+    		breadcrumbName = 'Saída', 
+    		filterEnabled = true, 
+    		filterName = 'Buscar saídas'" >
+
+<head>
+    <title>Clínicas - Saída</title>
+</head>
+
+<div layout:fragment="filter-table">
+	<div class="row col s12 ">
+		<div class="col s2">
+                <input id="ultimos-30-dias" type="checkbox" class="validate filled-in"/>
+                <label for="ultimos-30-dias" class="grey-text text-darken-3">Últimos 30 dias</label>
+	    </div>
+	    <div class="col s2">
+                <input id="ultimos-3-meses" type="checkbox" class="validate filled-in" />
+                <label for="ultimos-3-meses" class="grey-text text-darken-3">Últimos 3 meses</label>
+	    </div>
+	    <div class="col s2">
+                <input id="ultimo-semestre" type="checkbox" class="validate filled-in" />
+                <label for="ultimo-semestre" class="grey-text text-darken-3">Último semestre</label>
+	    </div>
+	    <div class="col s2">
+                <input id="ultimo-ano" type="checkbox" class="validate filled-in" />
+                <label for="ultimo-ano" class="grey-text text-darken-3">Último ano</label>
+	    </div>												
+	</div>
+	<div class="row">
+		<div class="col s6">
+			<span class="bold-text text-14 grey-text text-darken-3"> Total de saídas com status em andamento: </span>
+			<span id="statusAndamento" class="val-data-atual grey-text text-darken-3 " th:text="${total_em_andamento}"></span>
+		</div>	
+	
+		<div class="col s6">
+			<span class="bold-text text-14 grey-text text-darken-3"> Total de saídas com status finalizada: </span>
+			<span id="statusFinalizada" class="val-data-atual grey-text text-darken-3 " th:text="${total_finalizada}"></span>
+		</div>
+	</div>
+</div>
+
+<table 
+	layout:fragment="table" id="table-listar-saidas">
+	
+   <thead>
+       <tr>
+           <th class="hide-on-small-only">Tipo</th>
+           <th class="hide-on-small-only">Data</th>
+           <th class="hide-on-small-only">Origem</th>
+           <th class="hide-on-small-only">Destino</th>
+           <th class="hide-on-med-and-down">Status</th>
+           <th class="hide-on-med-and-down">Responsável</th>
+           <th class="hide-on-med-and-down"></th>
+       </tr>
+   </thead>				 
+   <tbody>
+       <tr th:each="saida:${list}">
+           <td class="hide-on-small-only" th:text="${saida.tipo.descricao}"></td>
+		   <td class="hide-on-small-only" th:text="${#calendars.format(saida.data,'dd/MM/yyyy')}"></td>
+		   <td class="hide-on-small-only" th:text="${saida.origem}? ${saida.origem.nome}: ' - '"></td>
+		   <td class="hide-on-small-only" th:text="${saida.destino}? ${saida.destino.nome}: ' - '"></td>
+		   <td th:text="${saida.status.descricao}" class="hide-on-med-and-down bold" th:classappend="${saida.status.descricao=='FINALIZADA'} ? blue-text : deep-orange-text"></td>
+		   <td th:text="${saida.responsavel}? ${saida.responsavel.nome} : ' - '"></td>
+           <td class="hide-on-med-and-down action">
+           		<div class="valign-wrapper center">
+					<a class="btn-icon waves-effect tooltipped" th:attr="data-tooltip='Visualizar Saída'"
+					   th:href="@{/saida/__${saida.id}__/visualizar}">
+						<i class="material-icons">search</i>
+					</a>
+					<a th:if="${(saida != null and saida.status.descricao != 'FINALIZADA')}" class="btn-icon waves-effect tooltipped"
+           				th:attr="data-tooltip='Editar Saída'"
+			     		th:href="@{/saida/{id}/editar/(id=${saida.id})}">
+			     		<i class="material-icons">edit</i>
+					</a>
+           		</div>
+           </td>
+       </tr>					        
+   </tbody>
+   
+</table>
+
+
+<section layout:fragment="js">
+	<script type="text/javascript" th:src="@{/material-clinicas/plugins/datefns/date_fns.min.js}"></script>    
+	<script type="text/javascript" th:src="@{/js/clinicas.js}"></script>
+	<script type="text/javascript" th:src="@{/js/saida/filtro-saida-materiais.js}"></script>
+</section>	
+
+</html>

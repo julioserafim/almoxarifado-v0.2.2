@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base-listar"
+    th:with="
+    		currentPage = 'unidadeMedida', 
+    		
+    		list = ${unidades},
+    		emptyListMessage = 'Nenhuma unidade de medida cadastrada!',
+    		
+    		addEnabled = true, 
+    		addTip = 'Adicionar uma unidade de medida', 
+    		addLink = @{/unidadeMedida/adicionar/},
+    		
+    		breadcrumbName = 'Unidades de Medida', 
+    		filterEnabled = true, 
+    		filterName = 'Buscar unidades'" >
+
+<head>
+    <title>Clínicas - Unidades de Medida</title>
+</head>
+
+<table 
+	layout:fragment="table"
+	data-sort-col="0" data-sort-direction="asc">
+	
+   <thead>
+       <tr>
+           <th>Nome</th>
+           <th></th>
+       </tr>
+   </thead>				 
+   <tbody>
+       <tr th:each="unidade:${list}">
+           <td th:text="${unidade.nome}"></td>
+           <td class="action">
+          		<div class="center">
+          			 <a class="btn-icon waves-effect tooltipped"
+          				th:attr="data-tooltip='Editar Unidade'"
+		     			th:href="@{/unidadeMedida/editar/{id}(id=${unidade.id})}">
+		     			<i class="material-icons">edit</i>
+					</a>
+					<a class="btn-icon waves-effect tooltipped"
+	          			th:attr="data-tooltip='Remover Unidade'"
+			     		th:href="@{/unidadeMedida/remover/{id}(id=${unidade.id})}">
+			     		<i class="material-icons">delete</i>
+					</a>
+          		</div>
+         	</td>
+       </tr>					        
+   </tbody>
+</table>
+
+</html>

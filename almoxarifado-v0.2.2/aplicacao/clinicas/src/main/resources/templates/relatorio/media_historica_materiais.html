@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base" th:with="currentPage='relatorio'">
+
+<head>
+    <title>Clínicas - Relatório Saída</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/relatorio/relatorio.css}" />
+</head>
+
+<body class="grey lighten-3">
+    <section layout:fragment="conteudo">
+        <div class="row col s12">
+            <div class="col s12 breadcrumbs valign-wrapper">
+                <a th:href="@{/}" class="breadcrumb blue-grey-text"> <i
+					class="material-icons left">home</i>
+				</a> <a th:href="@{/relatorio/listar}" class="breadcrumb blue-grey-text">Relatórios</a>
+                <a class="breadcrumb blue-grey-text">Média Histórica de Materiais</a>
+            </div>
+
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-action">
+
+                        <div class="row">
+                            <div class="col s12 no-padding">
+                                <span class="bold-text text-14 truncate">Saídas</span>
+                            </div>
+                        </div>
+
+                        <form id="formulario" class="formRelSaida" th:action="@{/relatorio/mediaHistoricaMateriais}" method="post">
+                            <div class="row col s12">
+                                <div class="col s4">
+                                    <input id="busca_periodo" type="radio" value="busca_periodo" checked="checked" th:name="tipo_busca" class="validate filled-in" th:checked="${buscarPeriodo}"
+                                    />
+                                    <label for="busca_periodo">Média de consumo por período</label>
+                                </div>
+                                <div class="col s4">
+                                    <input id="busca_semestre" type="radio" value="busca_semestre" th:name="tipo_busca" class="validate filled-in" th:checked="${!buscarPeriodo}" />
+                                    <label for="busca_semestre">Média de consumo por semestre</label>
+                                </div>
+                            </div>
+
+                            <div class="row" id="buscaPeriodo" th:style="${buscarPeriodo} ? 'display:block' : 'display:none'">
+                                <div class="col s4">
+                                    <label for="inicio">Data Início</label> <input type="text" th:value="${dataInicio} ? ${#calendars.format(dataInicio, 'MM/yyyy')}"
+                                        id="inicio" name="inicio" data-mask="00/0000" placeholder="Ex: 01/2015" />
+                                </div>
+                                <div class="col s4">
+                                    <label for="fim">Data Fim</label> <input type="text" th:value="${dataFim} ? ${#calendars.format(dataFim, 'MM/yyyy')}"
+                                        id="fim" name="fim" data-mask="00/0000" placeholder="Ex: 06/2015" />
+                                </div>
+                            </div>
+
+                            <div class="row" id="buscaSemestre" th:style="${!buscarPeriodo} ? 'display:block' : 'display:none'">
+                                <div class="col s3">
+                                    <label for="anoInicio">Ano Início</label> <input type="text" th:value="${anoInicio} ? ${#calendars.format(anoInicio, 'yyyy')}"
+                                        id="anoInicio" name="anoInicio" data-mask="0000" placeholder="Ex: 2015" />
+                                </div>
+                                <div class="col s3">
+                                    <label for="anoInicio">Semestre: Início</label>
+                                    <select name="semestreInicio">
+                                        <option value="1">1° semestre</option>
+                                        <option value="2">2° semestre</option>
+                                    </select>
+                                </div>
+                                <div class="col s3">
+                                    <label for="anoFim">Ano Fim</label> <input type="text" th:value="${anoFim} ? ${#calendars.format(anoFim, 'yyyy')}"
+                                        id="anoFim" name="anoFim" data-mask="0000" placeholder="Ex: 2017" />
+                                </div>
+
+                                <div class="col s3">
+                                    <label for="anoInicio">Semestre: Fim</label>
+                                    <select name="semestreFim">
+                                        <option value="1">1° semestre</option>
+                                        <option value="2">2° semestre</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="row col s12">
+                                <label for="origem">SETORES</label> <select id="origem" name="origem">
+									<option value="0">TODOS OS SETORES</option>
+									<option th:each="setor : ${setores}" th:value="${setor.id}"
+										th:text="${setor.nome.toUpperCase()}"
+										th:selected="(${setor.id} == ${setorSelecionado?.id})"></option>
+								</select>
+                            </div>
+                            <div class="row">
+                                <div class="right-align">
+                                    <button class="btn waves-effect waves-light" type="submit" name="action">
+										Enviar <i class="material-icons right">send</i>
+									</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col s12" th:if="${busca}">
+                <div class="card">
+                    <div class="card-action">
+                        <div th:if="${not #lists.isEmpty(saidas)}" class="row">
+                            <div class="col s12 input-field">
+                                <i class="material-icons prefix">search</i> <input id="table-filter" type="text" />
+                                <label for="table-filter" th:text="${filterName}"> </label>
+                            </div>
+                            <table id="tabelaMateriais" class="datatable table-hover table-lite table-card" data-filter="#table-filter" layout:fragment="table">
+
+                                <thead>
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Quantidade</th>
+                                        <th>Qtd/Mês</th>
+                                        <th th:unless="${buscarPeriodo}">Qtd/Semestre</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item:${saidas}">
+                                        <td th:text="${item.material.nome}"></td>
+                                        <td th:text="${item.somaQuantidades}"></td>
+                                        <td th:text="${#numbers.formatDecimal(item.mediaQuantidadePorPeriodo, 1, 'COMMA', 2, 'POINT')}"></td>
+                                        <td th:unless="${buscarPeriodo}" th:text="${#numbers.formatDecimal(item.mediaQuantidadePorSemestre, 1, 'COMMA', 2, 'POINT')}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div th:if="${#lists.isEmpty(saidas)}">
+                            <p class="center-align">Não foram encontrados resultados para a busca realizada</p>
+                        </div>
+
+                        <button class="download-pdf-button btn-floating btn-large tooltipped" data-tooltip="Baixar em PDF">
+							<i class="material-icons">picture_as_pdf</i>
+						</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+    <section layout:fragment="js">
+        <script type="text/javascript" th:src="@{/material-clinicas/js/loading.js}"></script>
+        <script type="text/javascript" th:src="@{/material-clinicas/plugins/pdf/pdfmake.min.js}"></script>
+        <script type="text/javascript" th:src="@{/material-clinicas/plugins/pdf/vfs_fonts.js}"></script>
+        <script type="text/javascript" th:src="@{/material-clinicas/plugins/moment/moment.js}"></script>
+        <script type="text/javascript" th:src="@{/js/relatorio/relatorio.js}"></script>
+        <script type="text/javascript" th:src="@{/js/relatorio/media_historica_materiais.js}"></script>
+
+    </section>
+</body>
+
+</html>

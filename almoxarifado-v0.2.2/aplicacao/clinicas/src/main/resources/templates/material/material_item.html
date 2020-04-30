@@ -1,0 +1,31 @@
+<div class="material-item val-material" th:fragment="material-item">
+	<div class="material-item-content">
+		<div class="row mdl-row no-margin">
+	    	<div class="col s4 valign-wrapper material-card-color">
+				<span th:text="${material.estoque}" 
+					class="val-estoque-material material-estoque bold-text white-text text-20 full-width center"></span>		
+			</div>
+			
+			<div class="col s8 card-content row no-margin mdl-row">
+				<div class="col s12 no-padding">
+					<span th:text="${material.nome}" 
+						class="val-nome-material light-text grey-text text-darken-2"></span>
+				</div>
+				
+				<div class="col s12 no-padding valign-wrapper hide">
+					<i class="mdi mdi-barcode code-icon"></i>
+					<span th:text="${material.codigoBarras}" 
+						class="val-codigo-barras-material light-text grey-text text-darken-2"></span>
+				</div>
+				
+				<div class="col s12 no-padding valign-wrapper hide">
+					<i class="mdi mdi-microscope code-icon"></i>
+					<span th:text="${material.codigoInterno}" 
+						class="val-codigo-interno-material light-text grey-text text-darken-2"></span>
+				</div>
+			
+			</div>
+		</div>
+		
+    </div>
+</div>

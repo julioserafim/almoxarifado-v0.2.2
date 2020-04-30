@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base"
+    th:with="currentPage='relatorio'">
+    
+<head>
+    <title>Clínicas - Relatórios</title>
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+    
+</head>
+
+<section layout:fragment="conteudo">
+
+    <div class="row">
+    
+    	<div class="col s12 breadcrumbs valign-wrapper">
+            <a th:href="@{/}" class="breadcrumb blue-grey-text">
+                <i class="material-icons left">home</i>
+            </a>
+            <a class="breadcrumb blue-grey-text">Relatórios</a>
+        </div>
+    
+    	<div class="col l10 offset-l1 m10 offset-m1 s12 row">
+
+            <div class="col l4 m6 s12">
+                <a th:href="@{/relatorio/relatorioGeralMateriais}">
+                    <div class="card">
+                        <div class="card-image blue lighten-1 waves-effect waves-block waves-light">
+                            <div class="card-title text-20">Relatório Geral de Materiais</div>
+                            <i class="material-icons card-image-icon">poll</i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col l4 m6 s12">
+    			<a th:href="@{/relatorio/materiaisValidade}">
+		    		<div class="card">
+			    		<div class="card-image indigo lighten-1 waves-effect waves-block waves-light">
+			    			<div class="card-title text-20">Vencimento de Materiais</div>
+			    			<i class="mdi mdi-calendar-clock card-image-icon"></i>
+			    		</div>
+			    	</div>
+		    	</a>
+	    	</div>
+	    	
+	    	<div class="col l4 m6 s12">
+    			<a th:href="@{/relatorio/materiais_sem_estoque}">
+		    		<div class="card">
+			    		<div class="card-image pink lighten-1 waves-effect waves-block waves-light">
+			    			<div class="card-title text-20">Materiais em Falta</div>
+			    			<i class="mdi mdi-comment-alert-outline card-image-icon"></i>
+			    		</div>
+			    	</div>
+		    	</a>
+	    	</div>
+
+	    	<!--<div class="col l4 m6 s12">
+    			<a th:href="@{/relatorio/estoqueEntradaSaidaSetor}">
+		    		<div class="card">
+			    		<div class="card-image red lighten-1 waves-effect waves-block waves-light">
+			    			<div class="card-title text-20">Estoque de Entrada e Saída do Setor</div>
+			    			<i class="material-icons card-image-icon">compare_arrows</i>
+			    		</div>
+			    	</div>
+		    	</a>
+	    	</div>-->
+	    	
+            <div class="col l4 m6 s12">
+                <a th:href="@{/relatorio/entradaPeriodoMaterial}">
+                    <div class="card">
+                        <div class="card-image deep-orange lighten-1 waves-effect waves-block waves-light">
+                            <div class="card-title text-20">Entradas de Materiais</div>
+                            <i class="mdi mdi-exit-to-app card-image-icon"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col l4 m6 s12">
+                <a th:href="@{/relatorio/saidaPeriodoMaterial}">
+                    <div class="card">
+                        <div class="card-image teal lighten-1 waves-effect waves-block waves-light">
+                            <div class="card-title text-20">Saídas de Materiais</div>
+                            <i class="mdi mdi-export card-image-icon"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+	    	
+	    	<!--<div class="col l4 m6 s12">
+    			<a th:href="@{/relatorio/mediaHistoricaMateriais}">
+		    		<div class="card">
+			    		<div class="card-image orange lighten-1 waves-effect waves-block waves-light">
+			    			<div class="card-title text-20">Média Histórica de Materiais</div>
+			    			<i class="mdi mdi-calendar-text card-image-icon"></i>
+			    		</div>
+			    	</div>
+		    	</a>
+	    	</div>-->
+	    	
+	    </div>
+        
+    </div>
+
+</section>
+
+<section layout:fragment="js">
+	
+	<script type="text/javascript" th:src="@{/javascript/index.js}"></script>
+
+</section>
+
+</html>

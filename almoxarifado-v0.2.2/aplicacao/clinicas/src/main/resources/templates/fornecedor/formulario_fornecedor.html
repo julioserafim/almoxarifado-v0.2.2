@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base" th:with="currentPage='fornecedor'">
+
+<head>
+<title>Clínicas - Fornecedor</title>
+</head>
+
+<body class="grey lighten-3"
+	th:with="acao_url=${acao == 'ADICIONAR'? 'adicionar' :'editar' }">
+	<section layout:fragment="conteudo">
+		<div class="row">
+
+			<div class="col s12 breadcrumbs valign-wrapper">
+				<a th:href="@{/}" class="breadcrumb blue-grey-text"> <i
+					class="material-icons left">home</i>
+				</a> <a th:href="@{/fornecedor/listar}"
+					class="breadcrumb blue-grey-text">Fornecedor</a> <a
+					th:if="${acao == 'ADICIONAR'}" class="breadcrumb blue-grey-text">Cadastrar</a>
+				<a th:if="${acao == 'EDITAR'}" class="breadcrumb blue-grey-text">Editar</a>
+			</div>
+
+			<div class="col s12">
+
+				<form action="#" class="card form_ajax" data-model="fornecedor"
+					th:attr="data-action=${acao_url}" th:object="${fornecedor}"
+					th:method="post" enctype="multipart/form-data">
+
+					<div class="card-image deep-orange lighten-1 center-align">
+						<a th:if="${acao == 'ADICIONAR'}"
+							class="card-title-large blue-grey-text text-lighten-5">Cadastrar
+							Fornecedor</a> <a th:if="${acao == 'EDITAR'}"
+							class="card-title-large blue-grey-text text-lighten-5">Editar
+							Fornecedor</a>
+					</div>
+
+					<div class="card-content">
+
+						<input type="hidden" th:field="*{id}" />
+
+						<div class="row">
+							<div class="input-field col s6">
+								<label th:for="${#ids.next('razaoSocial')}">Razão
+									Social: <span class="tooltipped red-text text-darken-2"
+									data-delay="50" data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input type="text" th:field="*{razaoSocial}"
+									required="required" />
+							</div>
+							<div class="input-field col s6">
+								<label th:for="${#ids.next('cnpj')}" class="cnpj">CNPJ:
+									<span class="tooltipped red-text text-darken-2" data-delay="50"
+									data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input type="text" th:field="*{cnpj}"
+									data-mask="00.000.000/0000-00" data-mask-clearifnotmatch="true"
+									required="required" />
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="input-field col s6">
+								<label th:for="${#ids.next('telefone')}">Telefone: <span
+									class="tooltipped red-text text-darken-2" data-delay="50"
+									data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input type="text" th:field="*{telefone}"
+									data-mask="(00) 00000-0000" data-mask-clearifnotmatch="true"
+									required="required" />
+							</div>
+							<div class="input-field col s6">
+								<label th:for="${#ids.next('email')}" class="cnpj">E-mail:
+									<span class="tooltipped red-text text-darken-2" data-delay="50"
+									data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input type="email" th:field="*{email}" required="required" />
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="input-field col s8">
+								<label th:for="${#ids.next('endereco')}">Endereço: <span
+									class="tooltipped red-text text-darken-2" data-delay="50"
+									data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input placeholder="Rua, Avenida, ..." type="text" th:field="*{endereco}" required="required" />
+							</div>
+							<div class="input-field col s4">
+								<label th:for="${#ids.next('numero')}">Número: <span
+									class="tooltipped red-text text-darken-2" data-delay="50"
+									data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input type="number" th:field="*{numero}" required="required" />
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="input-field col s12">
+								<label th:for="${#ids.next('complemento')}">Complemento:
+								</label> <input placeholder="Apartamento, Sala, ..." type="text" th:field="*{complemento}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s4">
+								<label th:for="${#ids.next('cep')}">CEP: </label> <input
+									type="text" th:field="*{cep}" data-mask="00000-000"
+									data-mask-clearifnotmatch="true" />
+							</div>
+							<div class="input-field col s4">
+								<label th:for="${#ids.next('cidade')}">Cidade: <span
+									class="tooltipped red-text text-darken-2" data-delay="50"
+									data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input type="text" th:field="*{cidade}" required="required" />
+							</div>
+							<div class="input-field col s4">
+								<label th:for="${#ids.next('estado')}">Estado: <span
+									class="tooltipped red-text text-darken-2" data-delay="50"
+									data-tooltip="Este campo é obrigatório.">*</span>
+								</label> <input type="text" th:field="*{estado}" required="required" />
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="card-action right-align">
+						<a th:href="@{/fornecedor/listar/}" type="button"
+							class="btn-flat waves-effect">Cancelar</a>
+						<button th:if="${acao == 'ADICIONAR'}" type="submit"
+							value="keep_add" class="btn waves-effect white-text">SALVAR
+							E ADICIONAR OUTRO</button>
+						<button th:if="${acao == 'ADICIONAR'}" type="submit" value="exit"
+							class="btn waves-effect white-text">SALVAR E SAIR</button>
+						<button th:if="${acao == 'EDITAR'}" type="submit" value="exit"
+							class="btn waves-effect white-text">SALVAR</button>
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+		<!--end container-->
+	</section>
+
+
+
+	<section layout:fragment="js">
+		<script type="text/javascript" th:src="@{/js/clinicas.js}"></script>
+		<script type="text/javascript"
+			th:src="@{/material-clinicas/plugins/mask/jquery.mask.js}"></script>
+
+	</section>
+
+
+</body>
+</html>

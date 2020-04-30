@@ -1,0 +1,112 @@
+.select2 .selection .select2-selection{
+  border: none;
+  border-bottom: 1px solid grey;
+  border-radius: 0;
+}
+
+.select2-container *:focus{
+  outline: none;
+}
+
+.select2-dropdown--below{
+  margin-top: 10px;
+}
+
+span.select2-container--open .select2-results__options .select2-results__option{
+  padding: 10px 16px 16px 10px;
+  color: black;
+}
+
+span.select2-container--open .select2-results__options .select2-results__option[aria-selected="true"]{
+  background-color: Silver;
+}
+
+span.select2-container--open .select2-results__options .select2-results__option--highlighted{
+  background-color: Gainsboro;
+}
+
+span.select2-container--open .select2-dropdown{
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.19), 0 8px 17px rgba(0, 0, 0, 0.2);
+  border: 1px solid #eee;
+}
+
+span.select2-container--open .select2-dropdown .select2-search--dropdown{
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 5px rgba(0, 0, 0, 0.26);
+  width: 95%;
+  margin: 10px auto;
+  border-radius: 1px;
+}
+
+span.select2-container--open .select2-dropdown .select2-search--dropdown input {
+  border-radius: 1px;
+}
+
+/*Until here css select2*/
+
+
+.horizontal-list {
+	overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 16px;
+}
+
+.horizontal-list .card {
+	width: 240px;
+	display: inline-block;
+	margin: 8px;
+	margin-right: 0;
+	cursor: pointer;
+}
+
+.codBarrasList {
+	padding: 0 !important;	
+}
+
+.codBarrasList .card {
+	margin: 1rem;
+	width: fit-content;
+	float: left;
+}
+
+.horizontal-list .card:hover {
+	box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
+}
+
+.ac-appender {
+	display: none;
+}
+
+.code-icon {
+	margin-right: 8px;
+}
+
+.padding-8 {
+	padding: 8px;
+}
+
+.btn-delete-barcode {
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	display: none;
+}
+
+.dl-el:hover .btn-delete-barcode {
+	display: block;
+}
+
+.dl-el {
+    transition: all 0.4s cubic-bezier(0.87, -0.41, 0.19, 1.44);
+    opacity: 0.0;
+    transform: scale(0, 1);
+}
+
+.dynamic-list-added {
+    transform: scale(1, 1);
+    opacity: 1.0;
+}
+
+.dynamic-list-removed {
+    transform: scale(0, 0);
+    opacity: 0.0;
+}

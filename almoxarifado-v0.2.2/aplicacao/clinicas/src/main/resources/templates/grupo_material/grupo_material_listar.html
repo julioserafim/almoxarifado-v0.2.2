@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base-listar"
+    th:with="
+    		currentPage = 'grupoMaterial', 
+    		
+    		list = ${grupos},
+    		emptyListMessage = 'Nenhum grupo cadastrado!',
+    		
+    		addEnabled = true, 
+    		addTip = 'Adicionar um grupo', 
+    		addLink = @{/grupoMaterial/adicionar/},
+    		
+    		breadcrumbName = 'Grupos de Material', 
+    		filterEnabled = true, 
+    		filterName = 'Buscar grupos'" >
+
+<head>
+    <title>Clínicas - Grupo</title>
+</head>
+
+<table 
+	layout:fragment="table"
+	data-sort-col="1" data-sort-direction="asc">
+   <thead>
+       <tr>
+           <th>Código</th>
+           <th>Nome</th>
+           <th></th>
+       </tr>
+   </thead>				 
+   <tbody>
+       <tr th:each="grupo:${list}">
+			<td th:text="${grupo.codigo}"></td>
+			<td th:text="${grupo.nome}"></td>
+           	<td class="action">
+           		<div class="center">
+           			 <a class="btn-icon waves-effect tooltipped"
+           				th:attr="data-tooltip='Editar Grupo'"
+			     		th:href="@{/grupoMaterial/editar/{id}(id=${grupo.id})}">
+			     		<i class="material-icons">edit</i>
+					</a>
+					<a class="btn-icon waves-effect tooltipped"
+           				th:attr="data-tooltip='Remover Grupo'"
+			     		th:href="@{/grupoMaterial/remover/{id}(id=${grupo.id})}">
+			     		<i class="material-icons">delete</i>
+					</a>
+           		</div>
+           	</td>
+       </tr>					        
+   </tbody>
+</table>
+
+</html>

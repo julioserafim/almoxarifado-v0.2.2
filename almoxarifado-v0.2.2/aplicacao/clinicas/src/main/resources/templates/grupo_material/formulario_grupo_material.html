@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='grupoMaterial'">
+
+<head>
+<title>Clínicas - Grupo Material</title>
+</head>
+
+<body class="grey lighten-3"
+	th:with="acao_url=${acao == 'ADICIONAR'? 'adicionar' :'editar' }">
+	<section layout:fragment="conteudo">
+		<div class="row">
+		
+			<div class="col s12 breadcrumbs valign-wrapper">
+	            <a th:href="@{/}" class="breadcrumb blue-grey-text">
+	                <i class="material-icons left">home</i>
+	            </a>
+	            
+	            <a th:href="@{/grupoMaterial/listar}" class="breadcrumb blue-grey-text">Grupo Material</a>
+	            
+	            <a th:if="${acao == 'ADICIONAR'}" class="breadcrumb blue-grey-text">Cadastrar</a>
+	            <a th:if="${acao == 'EDITAR'}" class="breadcrumb blue-grey-text">Editar</a>
+	        </div>
+		
+			<div class="col s12">
+
+				<form class="card form_ajax" data-model="grupoMaterial"
+							th:attr="data-action=${acao_url}" th:object="${grupoMaterial}"
+							th:method="post" enctype="multipart/form-data">
+					
+					<div class="card-image red lighten-1 center-align">
+		        		<a th:if="${acao == 'ADICIONAR'}" class="card-title-large blue-grey-text text-lighten-5">Cadastrar Grupo de Material</a>
+	            		<a th:if="${acao == 'EDITAR'}" class="card-title-large blue-grey-text text-lighten-5">Editar Grupo de Material</a>
+					</div>
+
+					<div class="card-content">
+						
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="id" type="hidden" th:field="*{id}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s6">
+								<label th:for="codigo">Código <span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span> :</label>
+								<input type="text" th:field="*{codigo}" required="required"/>
+							</div>
+							<div class="row">
+								<div class="input-field col s6">
+									<label th:for="nome">Nome <span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span> :</label>
+									<input type="text" th:field="*{nome}" required="required"/>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="card-action right-align">
+						<a th:href="@{/grupoMaterial/listar/}" type="button" class="btn-flat waves-effect">Cancelar</a>
+                        <button th:if="${acao == 'ADICIONAR'}" type="submit" value="keep_add" class="btn waves-effect white-text">SALVAR E ADICIONAR OUTRO</button>
+                    	<button th:if="${acao == 'ADICIONAR'}" type="submit" value="exit" class="btn waves-effect white-text">SALVAR E SAIR</button>
+                    	<button th:if="${acao == 'EDITAR'}" type="submit" value="exit" class="btn waves-effect white-text">SALVAR</button>
+					</div>
+					
+				</form>
+				
+			</div>
+
+		</div>
+		<!--end container-->
+	</section>
+</body>
+<section layout:fragment="js">
+	<script type="text/javascript" th:src="@{/js/clinicas.js}"></script>
+</section>
+
+
+</html>

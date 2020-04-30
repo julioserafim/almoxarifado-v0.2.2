@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base">
+
+<head>
+    <title>Clínicas - Alterar Senha</title>
+    
+</head>
+<section layout:fragment="conteudo" >
+	<div class="row">
+	    <div class="col l10 offset-l1 m10 offset-m1 s12">
+	    	<form class="card"  th:action="@{/usuario/alterarSenha}" method="post">
+				<div class="card-image light-blue lighten-1 center-align">
+	        		<a class="card-title-large blue-grey-text text-lighten-5">Alterar Senha</a>
+            	</div>
+	    		<div class="card-content">
+	    			<div class="row">
+	    				<div class="input-field col s12 m12 l12">
+
+	    					<label for="senhaAtual">Senha Atual<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	    					<input id="senhaAtual" type="password" name="senhaAtual" required="required"/>
+	    				</div>
+	    				<div class="input-field col s12 m12 l12">
+	    					<label for="novaSenha">Nova Senha<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	    					<input id="novaSenha" type="password" name="novaSenha" required="required"/>
+	    				</div>
+	    				<div class="input-field col s12 m12 l12">
+	    					<label for="confirmNovaSenha">Confirmação da Nova Senha<span class="tooltipped red-text text-darken-2" data-delay="50" data-tooltip="Este campo é obrigatório.">*</span></label>
+	    					<input id="confirmNovaSenha" type="password" name="confirmNovaSenha" required="required"/>
+	    				</div>
+	    			</div>
+	    		</div>
+	    		<div class="card-action right-align">
+	    			<a th:href="@{/}" type="button" class="btn-flat waves-effect">Cancelar</a>
+					<button type="submit" value="exit" class="btn waves-effect white-text">SALVAR</button>
+	    		</div>
+	    	</form>
+	    </div>	        	   
+	</div>
+</section>
+
+<section layout:fragment="js">
+	<script type="text/javascript" th:src="@{/material-clinicas/js/loading.js}"></script>
+	<script type="text/javascript" th:src="@{/js/entrada/ms.js}"></script>
+</section>
+</html>

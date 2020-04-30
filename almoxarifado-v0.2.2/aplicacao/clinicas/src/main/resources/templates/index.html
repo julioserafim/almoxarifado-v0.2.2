@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="base/base"
+    th:with="currentPage='inicio'">
+    
+
+<head>
+    <title>Clínicas - Início</title>
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+    
+</head>
+
+<section layout:fragment="conteudo">
+
+    <div class="row">
+    
+    	<div class="col l10 offset-l1 m10 offset-m1 s12 row">
+    		<div class="col l4 m4 s4">
+	    		<a th:href="@{/material/listar}">
+		    		<div class="card">
+			    		<div class="card-image indigo lighten-1 waves-effect waves-block waves-light">
+			    			<div class="card-title">Materiais</div>
+			    			<i class="mdi mdi-package-variant card-image-icon"></i>
+			    		</div>
+			    		
+			    		<div class="card-action">
+			    			<a th:href="@{/material/listar}" class="btn-flat btn-sm waves-effect">Listar</a>
+			    			<a th:href="@{/material/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+			    		</div>
+			    	</div>
+			    </a>
+	    	</div>
+    		<div class="col l4 m4 s4">
+    			<a th:href="@{/entrada/listar}">
+		    		<div class="card">
+			    		<div class="card-image blue-grey lighten-1 waves-effect waves-block waves-light">
+			    			<div class="card-title">Entrada de Materiais</div>
+			    			<i class="mdi mdi-exit-to-app card-image-icon"></i>
+			    		</div>
+			    		<div class="card-action">
+			    			<a th:href="@{/entrada/listar}" class="btn-flat waves-effect">Listar</a>
+			    			<a th:href="@{/entrada/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+			    		</div>
+			    	</div>
+		    	</a>
+	    	</div>
+	    	
+	    	<div class="col l4 m4 s4">
+	    		<a th:href="@{/saida/listar}">
+		    		<div class="card">
+			    		<div class="card-image brown lighten-1 waves-effect waves-block waves-light">
+			    			<div class="card-title">Saída de Materiais</div>
+			    			<i class="mdi mdi-export card-image-icon"></i>
+			    		</div>
+			    		<div class="card-action">
+			    			<a th:href="@{/saida/listar}" class="btn-flat waves-effect">Listar</a>
+			    			<a th:href="@{/saida/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+			    		</div>
+			    	</div>
+			    </a>
+	    	</div>
+
+			<div class="col l4 m4 s4">
+				<a th:href="@{/relatorio/listar}">
+					<div class="card">
+						<div class="card-image pink lighten-1 waves-effect waves-block waves-light">
+							<div class="card-title">Relatórios</div>
+							<i class="mdi mdi-file-chart card-image-icon"></i>
+						</div>
+						<div class="card-action">
+							<a th:href="@{/relatorio/listar}" class="btn-flat btn-sm waves-effect">Listar</a>
+						</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col l4 m4 s4">
+				<a th:href="@{/usuario/listar}">
+					<div class="card">
+						<div class="card-image blue lighten-1 waves-effect waves-block waves-light">
+							<div class="card-title">Usuários</div>
+							<i class="mdi mdi-account-multiple card-image-icon"></i>
+						</div>
+						<div class="card-action">
+							<a th:href="@{/usuario/listar}" class="btn-flat btn-sm waves-effect">Listar</a>
+							<a th:href="@{/usuario/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+						</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col l4 m4 s4">
+				<a th:href="@{/grupoMaterial/listar}">
+					<div class="card">
+						<div class="card-image red lighten-1 waves-effect waves-block waves-light">
+							<div class="card-title">Grupos de Materiais</div>
+							<i class="material-icons card-image-icon">equalizer</i>
+						</div>
+						<div class="card-action">
+							<a th:href="@{/grupoMaterial/listar}" class="btn-flat btn-sm waves-effect">Listar</a>
+							<a th:href="@{/grupoMaterial/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+						</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col l4 m4 s4">
+				<a th:href="@{/unidadeMedida/listar}">
+					<div class="card">
+						<div class="card-image blue-grey lighten-1 waves-effect waves-block waves-light">
+							<div class="card-title">Unidades de Medida</div>
+							<i class="material-icons card-image-icon">straighten</i>
+						</div>
+						<div class="card-action">
+							<a th:href="@{/unidadeMedida/listar}" class="btn-flat btn-sm waves-effect">Listar</a>
+							<a th:href="@{/unidadeMedida/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+						</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col l4 m4 s4">
+				<a th:href="@{/setor/listar}">
+					<div class="card">
+						<div class="card-image deep-purple lighten-1 waves-effect waves-block waves-light">
+							<div class="card-title">Setores</div>
+							<i class="mdi mdi-city card-image-icon"></i>
+						</div>
+						<div class="card-action">
+							<a th:href="@{/setor/listar}" class="btn-flat waves-effect">Listar</a>
+							<a th:href="@{/setor/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+						</div>
+					</div>
+				</a>
+			</div>
+
+			<div class="col l4 m4 s4">
+				<a th:href="@{/fornecedor/listar}">
+					<div class="card">
+						<div class="card-image deep-orange lighten-1 waves-effect waves-block waves-light">
+							<div class="card-title">Fornecedores</div>
+							<i class="mdi mdi-truck-delivery card-image-icon"></i>
+						</div>
+						<div class="card-action">
+							<a th:href="@{/fornecedor/listar}" class="btn-flat btn-sm waves-effect">Listar</a>
+							<a th:href="@{/fornecedor/adicionar}" class="btn-flat waves-effect">Adicionar</a>
+						</div>
+					</div>
+				</a>
+			</div>
+    	
+	    </div>
+        
+    </div>
+
+</section>
+
+<section layout:fragment="js">
+	
+	<script type="text/javascript" th:src="@{/javascript/index.js}"></script>
+
+</section>
+
+</html>

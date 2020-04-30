@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="base/base"
+	th:with="currentPage='relatorio'">
+
+<head>
+	<title>Clínicas - Relatório Entradas de Materiais</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/relatorio/relatorio.css}"/>
+</head>
+
+<section layout:fragment="conteudo">
+	<div class="row">
+		<div class="col s12 breadcrumbs valign-wrapper">
+			<a th:href="@{/}" class="breadcrumb blue-grey-text"> <i
+				class="material-icons left">home</i>
+			</a> <a th:href="@{/relatorio/listar}" class="breadcrumb blue-grey-text">Relatórios</a>
+			<a class="breadcrumb blue-grey-text">Entradas de Materiais</a>
+		</div>
+
+		<div class="col s12">
+			<div class="table-datatables card">
+				<div class="card-content row no-margin">
+					<div class="row">
+						<form id="formulario" class="formRelEntrada"  th:action="@{/relatorio/entradaPeriodoMaterial}" method="post">
+							<div class="row">
+								<div class="col s4">
+									<label for="inicio">Data de Início</label>
+									<input required="required" type="text" th:value="${dataInicio} ? ${#calendars.format(dataInicio, 'dd/MM/yyyy')}"
+										id="inicio" name="inicio" data-mask="00/00/0000" />
+								</div>
+								<div class="col s4">
+									<label for="fim">Data de Fim</label>
+									<input required="required" type="text" th:value="${dataFim} ? ${#calendars.format(dataFim, 'dd/MM/yyyy')}"
+										   id="fim" name="fim" data-mask="00/00/0000" />
+								</div>
+								<div class="col s4">
+									<label for="origem">Setor</label>
+									<select id="origem" name="origem">
+										<option value="0">TODOS</option>
+										<option th:each="setor : ${setores}" th:value="${setor.id}" th:text="${setor.nome.toUpperCase()}"
+											th:selected="(${setor.id} == ${setorSelecionado?.id})"></option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="right-align">
+									<button class="btn waves-effect waves-light" type="submit" name="action">Buscar <i class="material-icons right">send</i></button>
+								</div>
+							</div>
+
+						</form>
+					</div>
+
+					<div th:if="${#lists.isEmpty(entradas) and busca}">
+						<p class="center-align">Não foram encontrados resultados para a busca realizada</p>
+					</div>
+
+					<button class="download-pdf-button btn-floating btn-large tooltipped" data-tooltip="Baixar PDF">
+						<i class="material-icons">picture_as_pdf</i>
+					</button>
+
+					<table th:unless="${#lists.isEmpty(entradas)}" id="tabelaMateriais" class="datatable table-hover table-card" data-filter="#table-filter" layout:fragment="table">
+						<thead>
+							<tr>
+								<th>Nome</th>
+								<th>Quantidade</th>
+								<th>Data da Entrada</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr  th:each="item:${entradas}">
+								<td th:inline="text">[[${item.nome}]] ([[${item.unidadeMedida}]])</td>
+								<td th:text="${item.quantidade}"></td>
+								<td th:text="${#calendars.format(item.data, 'dd/MM/yyyy')}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!--<div class="col s12" th:if="${busca}">
+			<div class="card">
+				<div class="card-action">
+					<div th:if="${not #lists.isEmpty(entradas)}" class="row">
+						<div class="col s12 input-field">
+							<i class="material-icons prefix">search</i> <input
+								id="table-filter" type="text" /> <label for="table-filter"
+								th:text="${filterName}"> </label>
+						</div>
+
+
+					</div>
+
+
+				</div>
+			</div>
+
+		</div>-->
+	</div>
+</section>
+<section layout:fragment="js">
+
+	<script type="text/javascript" th:src="@{/material-clinicas/plugins/datatables/dataTables.buttons.min.js}"></script>
+	<script type="text/javascript" th:src="@{/material-clinicas/plugins/datatables/jszip.min.js}"></script>
+	<script type="text/javascript" th:src="@{/material-clinicas/plugins/datatables/buttons.html5.min.js}"></script>
+	<script type="text/javascript" th:src="@{/material-clinicas/plugins/pdf/pdfmake.min.js}"></script>
+	<script type="text/javascript" th:src="@{/material-clinicas/plugins/pdf/vfs_fonts.js}"></script>
+	<script type="text/javascript" th:src="@{/material-clinicas/plugins/moment/moment.js}"></script>
+	<script type="text/javascript" th:src="@{/js/relatorio/relatorio.js}"></script>
+	<script type="text/javascript" th:src="@{/js/relatorio/entrada-periodo-material.js}"></script>
+
+</section>
+</html>
