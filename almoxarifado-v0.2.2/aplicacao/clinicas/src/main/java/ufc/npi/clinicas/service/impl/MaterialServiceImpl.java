@@ -1,6 +1,5 @@
 package ufc.npi.clinicas.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,9 +59,12 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public void adicionarCodigoBarras(CodigoDeBarras codigoBarras) throws ClinicasException  {
+	public void adicionarCodigoBarras(String codigoBarras, Material material) throws ClinicasException  {
 		try {
-			codigoDeBarrasRepository.save(codigoBarras);
+			CodigoDeBarras codigo = new CodigoDeBarras(codigoBarras, material);
+			
+			material.addCodigo(codigo);
+			codigoDeBarrasRepository.save(codigo);
 
 		} catch (IllegalArgumentException e) {
 			throw new ClinicasException(Constants.MATERIAL_CODIGO_BARRAS_ADICIONAR_ERRO);
