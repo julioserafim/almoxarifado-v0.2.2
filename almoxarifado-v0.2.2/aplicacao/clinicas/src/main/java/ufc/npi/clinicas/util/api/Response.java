@@ -34,7 +34,7 @@ public class Response {
 	}
 	
 	public Response withSuccessMessage(String message) {
-		this.alert = new AlertSet().withSuccess(message).get(0);
+		this.setAlert(new AlertSet().withSuccess(message).get(0));
 		return this;
 	}
 	
