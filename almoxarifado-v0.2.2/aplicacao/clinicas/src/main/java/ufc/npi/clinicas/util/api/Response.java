@@ -29,7 +29,7 @@ public class Response {
 	}
 	
 	public Response withInfoMessage(String message) {
-		this.alert = new AlertSet().withInfo(message).get(0);
+		this.setAlert(new AlertSet().withInfo(message).get(0));
 		return this;
 	}
 	
