@@ -7,7 +7,6 @@ import javax.inject.Inject;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -116,8 +115,8 @@ public class UsuarioController {
 		return mav;
 	}
 
-	public void findByEmail(ModelAndView mav, Authentication auth ) {
-		 String senhaAtual,  String novaSenha;
+	public void buscarPorEmail(ModelAndView mav, Authentication auth,
+			@RequestParam(name = "senhaAtual") String senhaAtual, @RequestParam(name = "novaSenha") String novaSenha) {
 		Usuario usuario = usuarioService.findByEmail(auth.getName());
 		if (usuario != null && new BCryptPasswordEncoder().matches(senhaAtual, usuario.getSenha())) {
 			usuario.setSenha(novaSenha);
@@ -129,13 +128,14 @@ public class UsuarioController {
 	}
 
 	@PostMapping(value = "/alterarSenha")
+
 	public ModelAndView alterarSenha(ModelAndView mav, Authentication auth,
 			@RequestParam(name = "senhaAtual") String senhaAtual, @RequestParam(name = "novaSenha") String novaSenha,
 			@RequestParam(name = "confirmNovaSenha") String confirmNovaSenha) {
 		if (novaSenha == null || novaSenha.isEmpty()) {
 			mav.addObject("alertas", new AlertSet().withLongError("Erro. Informe a nova senha!"));
 		} else if (novaSenha.equals(confirmNovaSenha)) {
-			findByEmail(mav, auth);
+			buscarPorEmail(mav, auth, senhaAtual, novaSenha);
 		} else {
 			mav.addObject("alertas", new AlertSet().withLongError("Erro. Nova senha é diferente da confiramação!"));
 		}
