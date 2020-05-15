@@ -40,7 +40,29 @@ public class MaterialServiceImpl implements MaterialService {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Override
-	public boolean adicionar(Material material) {
+	public Map<String, Object> adicionar(Material material, CodigoDeBarras codigoDeBarras) throws ClinicasException {
+		Map<String, Object> result = new HashMap();
+
+		if (material.getId() != null) {
+			this.adicionarCodigoBarras(codigoDeBarras);
+			result.put("message", Constants.MATERIAL_CODIGO_BARRAS_ADCIONADO);
+			result.put("material", new Material());
+		} else {
+			boolean adicionado = this.verificarESalvarMaterial(material);
+
+			if (!adicionado) {
+				throw new ClinicasException(Constants.MATERIAL_EXISTE_OU_CODIGO_INTERNO_EXISTE);
+			}
+
+			result.put("message", Constants.MATERIAL_ADICIONAR_SUCESSO);
+			result.put("material", material);
+		}
+
+		return result;
+	}
+
+	@Override
+	public boolean verificarESalvarMaterial(Material material) {
 
 		Material materialExistente = materialRepository.getByNomeAndUnidadeMedida(material.getNome(), material.getUnidadeMedida());
 		if (materialExistente != null) {

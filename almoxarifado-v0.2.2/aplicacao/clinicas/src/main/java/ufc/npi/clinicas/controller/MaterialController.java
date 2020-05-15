@@ -20,6 +20,7 @@ import ufc.npi.clinicas.util.api.Response;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -57,26 +58,13 @@ public class MaterialController {
 		cd.setCodigo(codBarras);
 		cd.setMaterial(material);
 		material.addCodigo(cd);
-		if (material.getId() != null) {
-			try {
-				materialService.adicionarCodigoBarras(cd);
-				return new Response().withObject(new Material())
-						.withSuccessMessage(Constants.MATERIAL_CODIGO_BARRAS_ADCIONADO);
-			} catch (ClinicasException e) {
-				return new Response().withObject(new Material()).withErrorMessage(e.getMessage());
-			}
-		} else {
-			boolean adicionar = materialService.adicionar(material);
 
-			if (adicionar) {
-				return new Response().withObject(material).withSuccessMessage(Constants.MATERIAL_ADICIONAR_SUCESSO);
-			} else {
-				return new Response().withObject(material).withFailStatus()
-						.withInfoMessage(Constants.MATERIAL_EXISTE_OU_CODIGO_INTERNO_EXISTE);
-
-			}
+		try {
+			Map<String, Object> result = materialService.adicionar(material, cd);
+			return new Response().withObject(result.get("material")).withSuccessMessage(result.get("message").toString());
+		} catch (ClinicasException e) {
+			return new Response().withObject(material).withErrorMessage(e.getMessage());
 		}
-
 	}
 
 	@GetMapping(value = "/editar/{idMaterial}")
