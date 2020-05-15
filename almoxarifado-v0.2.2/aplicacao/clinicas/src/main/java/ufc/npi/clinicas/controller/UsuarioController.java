@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -115,6 +116,18 @@ public class UsuarioController {
 		return mav;
 	}
 
+	public void findByEmail(ModelAndView mav, Authentication auth ) {
+		 String senhaAtual,  String novaSenha;
+		Usuario usuario = usuarioService.findByEmail(auth.getName());
+		if (usuario != null && new BCryptPasswordEncoder().matches(senhaAtual, usuario.getSenha())) {
+			usuario.setSenha(novaSenha);
+			usuarioService.adicionar(usuario);
+			mav.addObject("alertas", new AlertSet().withLongSuccess("Senha Alterada com sucesso!"));
+		} else {
+			mav.addObject("alertas", new AlertSet().withLongError("Erro. Senha Incorreta!"));
+		}
+	}
+
 	@PostMapping(value = "/alterarSenha")
 	public ModelAndView alterarSenha(ModelAndView mav, Authentication auth,
 			@RequestParam(name = "senhaAtual") String senhaAtual, @RequestParam(name = "novaSenha") String novaSenha,
@@ -122,14 +135,7 @@ public class UsuarioController {
 		if (novaSenha == null || novaSenha.isEmpty()) {
 			mav.addObject("alertas", new AlertSet().withLongError("Erro. Informe a nova senha!"));
 		} else if (novaSenha.equals(confirmNovaSenha)) {
-			Usuario usuario = usuarioService.findByEmail(auth.getName());
-			if (usuario != null && new BCryptPasswordEncoder().matches(senhaAtual, usuario.getSenha())) {
-				usuario.setSenha(novaSenha);
-				usuarioService.adicionar(usuario);
-				mav.addObject("alertas", new AlertSet().withLongSuccess("Senha Alterada com sucesso!"));
-			} else {
-				mav.addObject("alertas", new AlertSet().withLongError("Erro. Senha Incorreta!"));
-			}
+			findByEmail(mav, auth);
 		} else {
 			mav.addObject("alertas", new AlertSet().withLongError("Erro. Nova senha é diferente da confiramação!"));
 		}
