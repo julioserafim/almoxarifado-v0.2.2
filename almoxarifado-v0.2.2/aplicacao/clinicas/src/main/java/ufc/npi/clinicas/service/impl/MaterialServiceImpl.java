@@ -41,7 +41,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public Map<String, Object> adicionar(Material material, CodigoDeBarras codigoDeBarras) throws ClinicasException {
-		Map<String, Object> result = new HashMap();
+		Map<String, Object> result = new HashMap<>();
 
 		if (material.getId() != null) {
 			this.adicionarCodigoBarras(codigoDeBarras);
