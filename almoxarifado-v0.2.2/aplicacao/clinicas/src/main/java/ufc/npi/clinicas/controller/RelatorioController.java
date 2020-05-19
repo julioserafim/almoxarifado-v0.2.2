@@ -21,14 +21,7 @@ import ufc.npi.clinicas.exceptions.ClinicasException;
 import ufc.npi.clinicas.model.EstoqueLote;
 import ufc.npi.clinicas.model.Material;
 import ufc.npi.clinicas.model.Setor;
-import ufc.npi.clinicas.service.EntradaService;
-import ufc.npi.clinicas.service.EstoqueLoteService;
-import ufc.npi.clinicas.service.EstoqueSetorService;
-import ufc.npi.clinicas.service.ItemEntradaService;
-import ufc.npi.clinicas.service.ItemSaidaService;
-import ufc.npi.clinicas.service.MaterialService;
-import ufc.npi.clinicas.service.SaidaMaterialService;
-import ufc.npi.clinicas.service.SetorService;
+import ufc.npi.clinicas.service.*;
 import ufc.npi.clinicas.util.Constants;
 import ufc.npi.clinicas.util.alert.AlertSet;
 import ufc.npi.clinicas.util.api.Response;
@@ -55,6 +48,9 @@ public class RelatorioController {
 	
 	@Inject
 	private ItemEntradaService itemEntradaService;
+
+	@Inject
+	private RelatorioService relatorioService;
 
 	
 	@GetMapping(value="/estoqueEntradaSaidaSetor")
@@ -249,32 +245,6 @@ public class RelatorioController {
 			@RequestParam("semestreFim") Integer semestreFim
 			){
 
-		Boolean buscarPeriodo = false;
-		if (tipoBusca.equals("busca_periodo"))
-			buscarPeriodo = true;
-
-		ModelAndView modelAndView = new ModelAndView("relatorio/media_historica_materiais")
-				.addObject("setores", setorService.listar())
-				.addObject("dataInicio", inicio)
-				.addObject("dataFim", fim)
-				.addObject("anoInicio", anoInicio)
-				.addObject("anoFim", anoFim)
-				.addObject("setorSelecionado", setor)
-				.addObject("buscarPeriodo", buscarPeriodo)
-				.addObject("busca", true);
-
-		try {
-			if(buscarPeriodo){
-				modelAndView.addObject("saidas", itemSaidaService.getMediaSaidasPorPeriodo(setor, inicio, fim));
-			}
-			else{
-				modelAndView.addObject("saidas", itemSaidaService.getMediaSaidasPorSemestre(setor, semestreInicio, semestreFim, anoInicio, anoFim));
-			}
-		
-		} catch (ClinicasException e) {
-			modelAndView.addObject("alertas", new AlertSet().withLongWarning(e.getMessage()));
-		}
-
-		return modelAndView;
+		return relatorioService.gerarMediaHistorica(inicio, fim , anoInicio, anoFim, setor, tipoBusca, semestreInicio, semestreFim);
 	}
 }
