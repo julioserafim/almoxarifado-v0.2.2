@@ -50,10 +50,15 @@ public class UsuarioServiceImpl implements UsuarioService{
 		if(usuarioAntigo == null){
 			return false;
 		}
+
+		usuario.setHabilitado(usuarioAntigo.isHabilitado());
+		usuario.setSenha(usuarioAntigo.getSenha());
+
+		return this.salvarUsuario(usuario);
+	}
+
+	private boolean salvarUsuario(Usuario usuario) {
 		try {
-			usuario.setHabilitado(usuarioAntigo.isHabilitado());
-			usuario.setSenha(usuarioAntigo.getSenha());
-			
 			usuarioRepository.save(usuario);
 		} catch (IllegalArgumentException e) {
 			return false;
