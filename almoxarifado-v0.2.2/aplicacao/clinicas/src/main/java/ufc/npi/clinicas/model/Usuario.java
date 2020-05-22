@@ -184,4 +184,11 @@ public class Usuario implements UserDetails {
 		return this.habilitado;
 	}
 
+	public void gerarSenha() {
+		if (this.getSenha() == null ){
+			this.setSenha(this.getSiape());				
+		}
+		this.setHashSenha(this.getSenha());
+		this.setHabilitado(true);
+	}
 }

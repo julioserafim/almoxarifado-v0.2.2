@@ -30,12 +30,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	@Override
 	public boolean adicionar(Usuario usuario) {
 		try {
-			if (usuario.getSenha() == null ){
-				//senha padrão é o número do SIAPE
-				usuario.setSenha(usuario.getSiape());				
-			}
-			usuario.setHashSenha(usuario.getSenha());
-			usuario.setHabilitado(true);
+			usuario.gerarSenha();
 			usuarioRepository.save(usuario);
 		}
 		catch (DataIntegrityViolationException e){
