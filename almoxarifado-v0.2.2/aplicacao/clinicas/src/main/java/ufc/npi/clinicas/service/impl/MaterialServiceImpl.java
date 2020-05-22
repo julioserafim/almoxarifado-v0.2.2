@@ -33,34 +33,42 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Inject
 	private CodigoBarrasRepository codigoDeBarrasRepository;
-	
+
 	@Inject
 	private EstoqueLoteRepository estoqueLoteRepository;
-		
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+	private Material material;
+
+	public boolean materialIsNotNull(Material material) {
+		this.material = material;
+		if (material != null) {
+
+		}
+
+		return true;
+	}
 
 	@Override
 	public boolean adicionar(Material material) {
 
-		Material materialExistente = materialRepository.getByNomeAndUnidadeMedida(material.getNome(), material.getUnidadeMedida());
-		if (materialExistente != null) {
-			return false;
-		} else {
-			
-			try {
-				if (material.getEstoque() == null){
-					material.setEstoque(0);
-				}
-				materialRepository.save(material);
-			}catch (DataIntegrityViolationException e) {
-				return false;
+		Material materialExistente = materialRepository.getByNomeAndUnidadeMedida(material.getNome(),
+				material.getUnidadeMedida());
+		materialIsNotNull(materialExistente);
+		try {
+			if (material.getEstoque() == null) {
+				material.setEstoque(0);
 			}
+			materialRepository.save(material);
+		} catch (DataIntegrityViolationException e) {
+			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public void adicionarCodigoBarras(CodigoDeBarras codigoBarras) throws ClinicasException  {
+	public void adicionarCodigoBarras(CodigoDeBarras codigoBarras) throws ClinicasException {
 		try {
 			codigoDeBarrasRepository.save(codigoBarras);
 
@@ -70,25 +78,23 @@ public class MaterialServiceImpl implements MaterialService {
 
 	}
 
-	
 	@Override
-	public boolean editar(Material material){
+	public boolean editar(Material material) {
 		Material materialExistenteEditar;
-		
+
 		try {
-			if (material.getEstoque() == null){
+			if (material.getEstoque() == null) {
 				material.setEstoque(0);
 			}
-			
+
 			material.setCodigoInterno(material.getCodigoInterno().trim());
 			material.setNome(material.getNome().trim());
-			if(material.getCodigoInterno() == null || material.getNome() == null || material.getNome().isEmpty()){
-				return false;				
-			}
-			else if(!material.getCodigoInterno().isEmpty()){
-				materialExistenteEditar =  materialRepository.CodigoInterno(material.getCodigoInterno());
-				if(materialExistenteEditar!=null && !materialExistenteEditar.getId().equals(material.getId()))
+			if (material.getCodigoInterno() == null || material.getNome() == null || material.getNome().isEmpty()) {
 				return false;
+			} else if (!material.getCodigoInterno().isEmpty()) {
+				materialExistenteEditar = materialRepository.CodigoInterno(material.getCodigoInterno());
+				if (materialExistenteEditar != null && !materialExistenteEditar.getId().equals(material.getId()))
+					return false;
 			}
 			materialRepository.save(material);
 		} catch (DataIntegrityViolationException e) {
@@ -109,11 +115,11 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public void excluir(Material material) throws ClinicasException{
+	public void excluir(Material material) throws ClinicasException {
 		if (material != null) {
 			try {
 				materialRepository.delete(material);
-			}  catch (DataIntegrityViolationException e) {
+			} catch (DataIntegrityViolationException e) {
 				throw new ClinicasException(Constants.MATERIAL_REMOVER_ERRO);
 			}
 		}
@@ -146,8 +152,8 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public List<Material> buscarPorNomeOuCodigoBarrasOuCodigoInterno(String nome) {
-		
-		//retorna todos os materiais digitados
+
+		// retorna todos os materiais digitados
 		List<Material> listaMaterial = materialRepository.search(nome);
 		return listaMaterial;
 	}
@@ -156,20 +162,22 @@ public class MaterialServiceImpl implements MaterialService {
 	public List<CodigoDeBarras> buscarCodigoBarras(Integer codigoBarras) {
 
 		return codigoDeBarrasRepository.findByMaterialId(codigoBarras);
-				
+
 	}
+
 	@Override
 	public boolean existeCodigoBarras(String codigoBarras) {
-		return codigoBarras != null && !codigoBarras.isEmpty() && !codigoDeBarrasRepository.findByCodigo(codigoBarras).isEmpty();
+		return codigoBarras != null && !codigoBarras.isEmpty()
+				&& !codigoDeBarrasRepository.findByCodigo(codigoBarras).isEmpty();
 	}
-	
+
 	public List<Material> buscarMateriaisSemEstoque() {
 		return materialRepository.getByMateriaisSemEstoque();
 	}
+
 	public List<Material> buscarMateriaisEmEstoque() {
 		return materialRepository.getByMateriaisEmEstoque();
 	}
-
 
 	public void removerCodigoDeBarras(Material material, CodigoDeBarras codigoDeBarras) {
 		material.removeCodigo(codigoDeBarras);
@@ -179,7 +187,7 @@ public class MaterialServiceImpl implements MaterialService {
 	@Override
 	public List<Material> buscarMateriaisEmFalta(Boolean incluirVencidos) {
 		List<Material> materiais = materialRepository.getByMateriaisSemEstoque();
-		if(incluirVencidos){
+		if (incluirVencidos) {
 			materiais.addAll(materialRepository.getMateriaisEstaoTodosVencidos());
 		}
 		return materiais;
@@ -187,7 +195,7 @@ public class MaterialServiceImpl implements MaterialService {
 
 	@Override
 	public boolean temValidade(Integer idMaterial) {
-		if(estoqueLoteRepository.getQuantidadeSemValidade(idMaterial) == 0) 
+		if (estoqueLoteRepository.getQuantidadeSemValidade(idMaterial) == 0)
 			return false;
 		return true;
 	}
