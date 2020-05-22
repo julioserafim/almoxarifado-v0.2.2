@@ -34,7 +34,7 @@ public interface MaterialService {
 
 	List<Material> buscarPorNomeOuCodigoBarrasOuCodigoInterno(String nome);
 
-	void adicionarCodigoBarras(CodigoDeBarras codigoBarras) throws ClinicasException;
+	void adicionarCodigoBarras(String codigoBarras, Material material) throws ClinicasException;
 	
 	boolean existeCodigoBarras(String codigoBarras);
 

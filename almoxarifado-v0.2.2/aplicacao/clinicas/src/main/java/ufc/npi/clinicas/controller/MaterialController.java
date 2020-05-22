@@ -25,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("material")
 public class MaterialController {
+	
 	@Autowired
 	private MaterialService materialService;
 
@@ -53,13 +54,9 @@ public class MaterialController {
 	public Response adicionarMaterial(@RequestParam(value = "codigos") String codBarras, Model model,
 			@Valid Material material) {
 
-		CodigoDeBarras cd = new CodigoDeBarras();
-		cd.setCodigo(codBarras);
-		cd.setMaterial(material);
-		material.addCodigo(cd);
 		if (material.getId() != null) {
 			try {
-				materialService.adicionarCodigoBarras(cd);
+				materialService.adicionarCodigoBarras(codBarras, material);
 				return new Response().withObject(new Material())
 						.withSuccessMessage(Constants.MATERIAL_CODIGO_BARRAS_ADCIONADO);
 			} catch (ClinicasException e) {
@@ -95,40 +92,21 @@ public class MaterialController {
 	}
 
 	@PostMapping(value = "/api/editar")
-	public Response editarMaterial(@RequestParam(value = "codigos") String codBarras, @Valid Material material)
+	public Response editarMaterial(@RequestParam(value = "codigos") String codBarra, @Valid Material material)
 			throws ClinicasException {
-		// Se houve alteração no codigo de barras, retorna algo apenas se tiver
-		// erro
-		if (codBarras != null && !codBarras.trim().isEmpty()) {
-			CodigoDeBarras cd = new CodigoDeBarras();
-			if (materialService.existeCodigoBarras(codBarras)) {
-				return new Response().withObject(material).withFailStatus()
-						.withInfoMessage(Constants.MATERIAL_CODIGO_BARRAS_EXISTE);
-			} else {
-				cd.setCodigo(codBarras);
-				cd.setMaterial(material);
-				material.addCodigo(cd);
-				try {
-					materialService.adicionarCodigoBarras(cd);
-					return new Response().withObject(new Material())
-							.withSuccessMessage(Constants.MATERIAL_CODIGO_BARRAS_ADCIONADO);
-				} catch (ClinicasException e) {
-					return new Response().withFailStatus().withObject(material).withErrorMessage(e.getMessage());
-				}
-			}
-		} else {
-			// Atualiza material, caso tenha mudança em outros campos além do
-			// codigo de barras
+		
+		if (!codigoBarraIsValid(codBarra)) {	
 			boolean adicionar = materialService.editar(material);
 
 			if (adicionar) {
 				return new Response().withObject(material).withSuccessMessage(Constants.MATERIAL_ADICIONAR_SUCESSO);
-			} else {
-				return new Response().withObject(material).withFailStatus()
+			} 
+			
+			return new Response().withObject(material).withFailStatus()
 						.withInfoMessage(Constants.MATERIAL_EXISTE_OU_CODIGO_INTERNO_EXISTE);
-
-			}
 		}
+		
+		return salvarCodigoBarras(codBarra, material);
 
 	}
 
@@ -241,5 +219,37 @@ public class MaterialController {
 		estoqueLoteService.excluirEstoqueLote(estoque);
 
 		return modelAndView;
+	}
+	
+	@SuppressWarnings("unused")
+	private Response salvarCodigoBarras(String codigo, Material material) {
+		
+		if (existsCodigo(codigo)) {
+			return new Response().withObject(material).withFailStatus()
+					.withInfoMessage(Constants.MATERIAL_CODIGO_BARRAS_EXISTE);
+		}
+
+		return adicionarCodigoBarras(codigo, material);
+	}
+	
+	@SuppressWarnings("unused")
+	private Response adicionarCodigoBarras(String codigo, Material material){
+		try {
+			materialService.adicionarCodigoBarras(codigo, material);
+			return new Response().withObject(new Material())
+					.withSuccessMessage(Constants.MATERIAL_CODIGO_BARRAS_ADCIONADO);
+		} catch (ClinicasException e) {
+			return new Response().withFailStatus().withObject(material).withErrorMessage(e.getMessage());
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean codigoBarraIsValid(String codigo) {
+		return codigo != null && !codigo.trim().isEmpty();
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean existsCodigo(String codigo) {
+		return materialService.existeCodigoBarras(codigo);
 	}
 }

@@ -158,15 +158,8 @@ public class RelatorioController {
 	@GetMapping(value = {"/materiais_sem_estoque", "/materiais_sem_estoque/incluir_vencidos={incluirVencidos}"})
 	public ModelAndView materiaisSemEstoque(ModelAndView mav, @PathVariable Optional<Boolean> incluirVencidos){
 		mav.setViewName("relatorio/materiais_sem_estoque");
-		Boolean flag = false;
-		
-		if(incluirVencidos.isPresent() && incluirVencidos.get()){
-			flag = true;
-		}
-		mav.addObject("incluir_vencidos", flag);
-		mav.addObject("materiais", materialService.buscarMateriaisEmFalta(flag));
-		
-
+		mav.addObject("incluir_vencidos", adicionarVencidos(incluirVencidos));
+		mav.addObject("materiais", materialService.buscarMateriaisEmFalta(adicionarVencidos(incluirVencidos)));
 		return mav;
 	}
 	
@@ -276,5 +269,10 @@ public class RelatorioController {
 		}
 
 		return modelAndView;
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean adicionarVencidos(Optional<Boolean> incluirVencidos) {
+		return incluirVencidos.isPresent() && incluirVencidos.get();
 	}
 }
