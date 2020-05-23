@@ -15,7 +15,7 @@ public interface ItemSaidaService {
 	boolean existePorSaidaMaterialEMaterialELote(SaidaMaterial saidaMaterial, Material material, String lote);
 	ItemSaida adicionar(ItemSaida itemSaida);
 
-	boolean excluirItemSaidaMaterial(Long idItemSaidaMaterial);
+	void excluirItemSaidaMaterial(Long idItemSaidaMaterial) throws ClinicasException;
 	ItemSaida buscarPorId(Long idItemSaidaMaterial);
 
 	List<ItemSaida> listarPorSaidaMaterial(SaidaMaterial saidaMaterial);
