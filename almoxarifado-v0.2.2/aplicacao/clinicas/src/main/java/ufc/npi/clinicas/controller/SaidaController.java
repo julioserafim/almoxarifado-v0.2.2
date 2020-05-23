@@ -232,7 +232,6 @@ public class SaidaController {
 					withErrorMessage(Constants.SAIDA_INCLUIR_MATERIAIS_ERRO_NAO_EXISTE_ESTOQUE_MATERIAL_SETOR);
 		}
 		return new Response().
-				withDoneStatus().
 				withObject(estoqueSetores);
 
 	}
@@ -289,7 +288,7 @@ public class SaidaController {
 			}else{
 				itemSaida.setSaidaMaterial(saidaMaterial);
 				itemSaida.setMaterial(material);
-				return new Response().withDoneStatus().withObject(this.itemSaidaService.adicionar(itemSaida))
+				return new Response().withObject(this.itemSaidaService.adicionar(itemSaida))
 						.withSuccessMessage(Constants.SAIDA_INCLUIR_MATERIAIS_SUCESSO_ADICIONADO);
 			}
 		}
@@ -299,7 +298,6 @@ public class SaidaController {
 	public Response listarItensSaidaPorSaida(SaidaMaterial saidaMaterial){
 				
 		return new Response().
-				withDoneStatus().
 				withObject(this.itemSaidaService.listarPorSaidaMaterial(saidaMaterial));
 		
 	}
