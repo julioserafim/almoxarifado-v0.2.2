@@ -57,14 +57,18 @@ public class MaterialServiceImpl implements MaterialService {
 				material.getUnidadeMedida());
 		materialIsNotNull(materialExistente);
 		try {
-			if (material.getEstoque() == null) {
-				material.setEstoque(0);
-			}
+			material(material);
 			materialRepository.save(material);
 		} catch (DataIntegrityViolationException e) {
 			return false;
 		}
 		return true;
+	}
+
+	private void material(Material material) {
+		if (material.getEstoque() == null) {
+			material.setEstoque(0);
+		}
 	}
 
 	@Override
