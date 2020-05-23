@@ -208,15 +208,20 @@ public class RelatorioController {
 	@GetMapping(value = { "/relatorioGeralMateriais",
 			"/relatorioGeralMateriais/incluir_sem_estoque={incluirSemEstoque}" })
 	public ModelAndView getTodosMateriais(ModelAndView mav, @PathVariable Optional<Boolean> incluirSemEstoque) {
+		List<Material> materiais = materiais(mav, incluirSemEstoque);
+		return mav;
+	}
+
+	private List<Material> materiais(ModelAndView mav, Optional<Boolean> incluirSemEstoque) {
 		mav.setViewName("relatorio/relatorio_geral_materiais");
-		List<Material> materiais;
+		List<Material> materiais = null;
 		incluirMateriasSemEstoque(mav, incluirSemEstoque);
 		if (!incluirMateriasSemEstoque(mav, incluirSemEstoque)) {
 			materiais = materialService.buscarMateriaisEmEstoque();
 			mav.addObject("incluir_sem_estoque", false);
 			mav.addObject("materiais", materiais);
 		}
-		return mav;
+		return materiais;
 	}
 
 	@GetMapping(value = "/mediaHistoricaMateriais")
