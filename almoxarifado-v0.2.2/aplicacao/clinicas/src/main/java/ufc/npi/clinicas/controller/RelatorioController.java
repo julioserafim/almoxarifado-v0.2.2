@@ -246,15 +246,7 @@ public class RelatorioController {
 		if (tipoBusca.equals("busca_periodo"))
 			buscarPeriodo = true;
 
-		ModelAndView modelAndView = new ModelAndView("relatorio/media_historica_materiais")
-				.addObject("setores", setorService.listar())
-				.addObject("dataInicio", inicio)
-				.addObject("dataFim", fim)
-				.addObject("anoInicio", anoInicio)
-				.addObject("anoFim", anoFim)
-				.addObject("setorSelecionado", setor)
-				.addObject("buscarPeriodo", buscarPeriodo)
-				.addObject("busca", true);
+		ModelAndView modelAndView = createHistoricalAverageModelAndView(inicio, fim, anoInicio, anoFim, setor, buscarPeriodo);
 
 		try {
 			if(buscarPeriodo){
@@ -268,6 +260,20 @@ public class RelatorioController {
 			modelAndView.addObject("alertas", new AlertSet().withLongWarning(e.getMessage()));
 		}
 
+		return modelAndView;
+	}
+
+	private ModelAndView createHistoricalAverageModelAndView(Date inicio, Date fim, Date anoInicio, Date anoFim, Setor setor,
+			Boolean buscarPeriodo) {
+		ModelAndView modelAndView = new ModelAndView("relatorio/media_historica_materiais")
+				.addObject("setores", setorService.listar())
+				.addObject("dataInicio", inicio)
+				.addObject("dataFim", fim)
+				.addObject("anoInicio", anoInicio)
+				.addObject("anoFim", anoFim)
+				.addObject("setorSelecionado", setor)
+				.addObject("buscarPeriodo", buscarPeriodo)
+				.addObject("busca", true);
 		return modelAndView;
 	}
 	
