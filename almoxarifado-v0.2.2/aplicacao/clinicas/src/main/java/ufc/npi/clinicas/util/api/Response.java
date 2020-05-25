@@ -44,7 +44,7 @@ public class Response {
 	}
 	
 	public Response withErrorMessage(String message) {
-		this.alert = new AlertSet().withError(message).get(0);
+		this.setAlert(new AlertSet().withError(message).get(0));
 		return this;
 	}
 	
