@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class ItemEntrada {
 	
+	private ItemEntrada2 itemEntrada2 = new ItemEntrada2();
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -28,10 +30,6 @@ public class ItemEntrada {
 	
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date validade;
-	
-	private Integer quantidade;
-	
-	private BigDecimal valorUnitario;
 	
 	@ManyToOne	
 	private Material material;
@@ -70,19 +68,19 @@ public class ItemEntrada {
 	}
 
 	public Integer getQuantidade() {
-		return quantidade;
+		return itemEntrada2.getQuantidade();
 	}
 
 	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+		itemEntrada2.setQuantidade(quantidade);
 	}
 
 	public BigDecimal getValorUnitario() {
-		return valorUnitario;
+		return itemEntrada2.getValorUnitario();
 	}
 
 	public void setValorUnitario(BigDecimal valorUnitario) {
-		this.valorUnitario = valorUnitario;
+		itemEntrada2.setValorUnitario(valorUnitario);
 	}
 
 	public Material getMaterial() {
@@ -139,9 +137,7 @@ public class ItemEntrada {
 	}
 	
 	public BigDecimal getValorTotal(){
-		if (valorUnitario==null)
-			return BigDecimal.ZERO;
-		return valorUnitario.multiply(BigDecimal.valueOf(quantidade));
+		return itemEntrada2.getValorTotal();
 	}
 	
 	public Integer totalItensAlocados(){

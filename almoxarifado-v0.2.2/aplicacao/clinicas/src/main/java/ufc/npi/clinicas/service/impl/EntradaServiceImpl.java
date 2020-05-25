@@ -147,35 +147,52 @@ public class EntradaServiceImpl implements EntradaService{
 			}
 			Material material = itemEntrada.getMaterial();
 			for(AlocacaoItemSetor alocacaoItemSetor : alocacoesItemSetors){
-				EstoqueSetor estoqueSetor = this.estoqueSetorService.buscarPorSetorEMaterial(alocacaoItemSetor.getSetor(), itemEntrada.getMaterial());
-				if(estoqueSetor == null){
-					estoqueSetor = new EstoqueSetor();
-					estoqueSetor.setSetor(alocacaoItemSetor.getSetor());
-					estoqueSetor.setMaterial(itemEntrada.getMaterial());
-					estoqueSetor.setQuantidade(0);
-					estoqueSetorService.adicionar(estoqueSetor);
-				}
-				estoqueSetor.setQuantidade(estoqueSetor.getQuantidade() + alocacaoItemSetor.getQuantidade());
-				estoqueSetorService.editar(estoqueSetor);
+				updateEstoqueSetor(itemEntrada, alocacaoItemSetor);
 				material.setEstoque(material.getEstoque() + alocacaoItemSetor.getQuantidade());				
 			}
 			materialService.editar(material);
 			
 			// Atualização do estoqueLote
-			EstoqueLote estoqueLote = estoqueLoteService.buscarPorMaterialLote(material, itemEntrada.getLote());
-			if(estoqueLote == null){
-				estoqueLote = new EstoqueLote();
-				estoqueLote.setLote(itemEntrada.getLote());
-				estoqueLote.setMaterial(material);
-				estoqueLote.setQuantidade(itemEntrada.getQuantidade());
-				estoqueLote.setValidade(itemEntrada.getValidade());
-			}else {
-				estoqueLote.atualizaQuantidade(itemEntrada.getQuantidade());
-			}
+			EstoqueLote estoqueLote = updateEstoqueLote(itemEntrada, material);
 			estoqueLoteService.salvar(estoqueLote);
 			
 		}
 		return true;
+	}
+
+	private void updateEstoqueSetor(ItemEntrada itemEntrada, AlocacaoItemSetor alocacaoItemSetor) {
+		EstoqueSetor estoqueSetor = this.estoqueSetorService.buscarPorSetorEMaterial(alocacaoItemSetor.getSetor(), itemEntrada.getMaterial());
+		if(estoqueSetor == null){
+			//caso não exista um estoqueSetor com os atributos passados por parametro, cria um novo.
+			estoqueSetor = createEstoqueSetor(itemEntrada, alocacaoItemSetor);
+		}
+		//modifica a quantidade e depois salva.
+		estoqueSetor.setQuantidade(estoqueSetor.getQuantidade() + alocacaoItemSetor.getQuantidade());
+		estoqueSetorService.editar(estoqueSetor);
+	}
+
+	private EstoqueSetor createEstoqueSetor(ItemEntrada itemEntrada, AlocacaoItemSetor alocacaoItemSetor) {
+		EstoqueSetor estoqueSetor;
+		estoqueSetor = new EstoqueSetor();
+		estoqueSetor.setSetor(alocacaoItemSetor.getSetor());
+		estoqueSetor.setMaterial(itemEntrada.getMaterial());
+		estoqueSetor.setQuantidade(0);
+		estoqueSetorService.adicionar(estoqueSetor);
+		return estoqueSetor;
+	}
+
+	private EstoqueLote updateEstoqueLote(ItemEntrada itemEntrada, Material material) {
+		EstoqueLote estoqueLote = estoqueLoteService.buscarPorMaterialLote(material, itemEntrada.getLote());
+		if(estoqueLote == null){
+			estoqueLote = new EstoqueLote();
+			estoqueLote.setLote(itemEntrada.getLote());
+			estoqueLote.setMaterial(material);
+			estoqueLote.setQuantidade(itemEntrada.getQuantidade());
+			estoqueLote.setValidade(itemEntrada.getValidade());
+		}else {
+			estoqueLote.atualizaQuantidade(itemEntrada.getQuantidade());
+		}
+		return estoqueLote;
 	}
 	
 	private boolean validarAlocacaoItemSetor(ItemEntrada itemEntrada, List<AlocacaoItemSetor> alocacoesItemSetors){
