@@ -24,12 +24,8 @@ import ufc.npi.clinicas.model.Material;
 import ufc.npi.clinicas.model.SaidaMaterial;
 import ufc.npi.clinicas.model.Setor;
 import ufc.npi.clinicas.model.Status;
-import ufc.npi.clinicas.service.EstoqueLoteService;
-import ufc.npi.clinicas.service.EstoqueSetorService;
-import ufc.npi.clinicas.service.ItemSaidaService;
+import ufc.npi.clinicas.service.*;
 
-import ufc.npi.clinicas.service.SaidaMaterialService;
-import ufc.npi.clinicas.service.SetorService;
 import ufc.npi.clinicas.util.Constants;
 import ufc.npi.clinicas.util.alert.AlertSet;
 import ufc.npi.clinicas.util.api.Response;
@@ -47,12 +43,14 @@ public class SaidaController {
 	@Inject
 	private EstoqueLoteService estoqueLoteService;
 
-
 	@Inject
 	private SetorService setorService;
 
 	@Inject
 	private ItemSaidaService itemSaidaService;
+
+	@Inject
+	private SaidaService saidaService;
 	
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public ModelAndView listar(ModelAndView mav) {
@@ -179,35 +177,8 @@ public class SaidaController {
 	}
 	
 	@RequestMapping(value="/{idSaida}/finalizar", method = RequestMethod.GET)
-	public ModelAndView finalizarSaida(ModelAndView mav, RedirectAttributes redirectAttributes, @PathVariable("idSaida") Integer idSaida){		
-		SaidaMaterial saida = saidaMaterialService.buscarPorId(idSaida);
-		if(saida == null){
-			mav.setViewName("redirect:/saida/listar");
-			mav.addObject("erro", Constants.SAIDA_NAO_ENCONTRADA);
-		}else if (saida.getStatus().equals(Status.FINALIZADA)){
-			mav.setViewName(String.format("redirect:/saida/%1d/visualizar",saida.getId()));
-			mav.addObject("sucesso", Constants.SAIDA_FINALIZAR_SUCESSO);
-		}else{			
-			try {
-				if(saida.getItens().isEmpty()){
-					mav.setViewName(String.format("redirect:/saida/%1d/incluirItens",saida.getId()));
-					redirectAttributes.addFlashAttribute("alertas", new AlertSet().withLongError(Constants.SAIDA_INCLUIR_MATERIAIS_ERRO_QUANTIDADE));
-				}
-				else{
-					estoqueSetorService.atualizarEstoquesSetor(saida);							
-					saida.setStatus(Status.FINALIZADA);
-					saidaMaterialService.editar(saida);				
-					
-					mav.setViewName(String.format("redirect:/saida/%1d/visualizar",saida.getId()));
-					redirectAttributes.addFlashAttribute("alertas", new AlertSet().withSuccess(Constants.SAIDA_FINALIZAR_SUCESSO));
-				}
-			} catch (ClinicasException e) {
-				mav.setViewName(String.format("redirect:/saida/%1d/incluirItens",saida.getId()));
-				redirectAttributes.addFlashAttribute("alertas", new AlertSet().withLongError(e.getMessage()));
-			}
-		}	
-		return mav;
-
+	public ModelAndView finalizarSaida(ModelAndView mav, RedirectAttributes redirectAttributes, @PathVariable("idSaida") Integer idSaida){
+		return saidaService.finalizarSaida(mav, redirectAttributes, idSaida);
 	}
 	
 	@RequestMapping(value = "/{idSaida}/incluirMateriais", method = RequestMethod.GET)
