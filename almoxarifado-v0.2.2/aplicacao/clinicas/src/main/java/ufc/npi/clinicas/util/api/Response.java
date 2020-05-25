@@ -49,7 +49,7 @@ public class Response {
 	}
 	
 	public Response withObject(Object object) {
-		this.object = object;
+		this.setObject(object);
 		return this;
 	}
 
