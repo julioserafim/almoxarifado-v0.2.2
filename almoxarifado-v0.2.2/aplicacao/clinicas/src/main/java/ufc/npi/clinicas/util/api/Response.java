@@ -9,20 +9,9 @@ public class Response {
 	private Alert alert;
 	
 	public Response() {
-		this(ResponseStatus.DONE, null, null);
-	}
-	
-	public Response(ResponseStatus status, Object object, Alert alert) {
-		this.status = status;
-		this.object = object;
-		this.alert = alert;
-	}
-	
-	public Response withDoneStatus() {
 		this.status = ResponseStatus.DONE;
-		return this;
 	}
-	
+		
 	public Response withFailStatus() {
 		this.status = ResponseStatus.FAIL;
 		return this;
@@ -57,24 +46,11 @@ public class Response {
 		return status;
 	}
 
-	public void setStatus(ResponseStatus status) {
-		this.status = status;
-	}
-
 	public Object getObject() {
 		return object;
 	}
 
-	public void setObject(Object object) {
-		this.object = object;
-	}
-
 	public Alert getAlert() {
 		return alert;
-	}
-
-	public void setAlert(Alert alert) {
-		this.alert = alert;
-	}
-	
+	}	
 }

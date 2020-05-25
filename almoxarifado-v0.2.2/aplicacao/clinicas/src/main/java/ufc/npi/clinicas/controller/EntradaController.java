@@ -240,7 +240,7 @@ public class EntradaController {
 
 			alocacaoItemSetor.setData(new Date());
 
-			return new Response().withDoneStatus()
+			return new Response()
 					.withObject(this.alocacaoItemSetorService.adicionar(alocacaoItemSetor))
 					.withSuccessMessage(Constants.ENTRADA_ALOCAR_MATERIAS_SUCESSO_ADICIONADO);
 		}
@@ -328,7 +328,7 @@ public class EntradaController {
 			return new Response().withFailStatus().withErrorMessage(Constants.MATERIAL_ERRO_NAO_EXISTE);
 
 		}
-		return new Response().withDoneStatus().withObject(materiais);
+		return new Response().withObject(materiais);
 	}
 	
 	@GetMapping(value = "/api/buscarAlocacoesPorItemEntrada")

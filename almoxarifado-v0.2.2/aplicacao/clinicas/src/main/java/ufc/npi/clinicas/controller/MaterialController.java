@@ -158,14 +158,14 @@ public class MaterialController {
 			return new Response().withFailStatus()
 					.withErrorMessage("NÃO EXISTEM CÓDIGOS DE BARRAS CADASTRADOS PARA ESSE MATERIAL");
 		}
-		return new Response().withObject(cod).withDoneStatus();
+		return new Response().withObject(cod);
 
 	}
 
 	@PostMapping(value = "api/buscarPorNome/material/{nomeMaterial}")
 	private Response buscarPorNome(@PathVariable("nomeMaterial") String nomeMaterial) {
 		List<Material> mw = materialService.buscarPorNomeOuCodigoBarrasOuCodigoInterno(nomeMaterial);
-		return new Response().withObject(mw).withDoneStatus();
+		return new Response().withObject(mw);
 	}
 
 	@GetMapping(value = "{idMaterial}/visualizar")
@@ -189,7 +189,7 @@ public class MaterialController {
 			return new Response().withFailStatus().withErrorMessage("Não foi possível remover o código de barras.");
 		}
 		materialService.removerCodigoDeBarras(material, codigoDeBarras);
-		return new Response().withDoneStatus().withSuccessMessage("Código de barras removido.");
+		return new Response().withSuccessMessage("Código de barras removido.");
 	}
 
 	@PostMapping(value = "{idMaterial}/editarEstoqueLote/{idEstoqueLote}")
