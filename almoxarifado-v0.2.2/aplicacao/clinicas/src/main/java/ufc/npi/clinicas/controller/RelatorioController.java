@@ -37,56 +37,21 @@ import ufc.npi.clinicas.util.api.Response;
 @RequestMapping("relatorio")
 public class RelatorioController {
 
-	@Inject
-	private EstoqueSetorService estoqueSetorService;
+	private RelatorioController2 relatorioController2 = new RelatorioController2();
 	@Inject
 	private MaterialService materialService;
 	@Inject
 	private EstoqueLoteService estoqueLoteService;
-	@Inject
-	private SetorService setorService;
-	@Inject
-	private SaidaMaterialService saidaService;
-	@Inject
-	private EntradaService entradaService;
-	
-	@Inject
-	private ItemSaidaService itemSaidaService;
-	
-	@Inject
-	private ItemEntradaService itemEntradaService;
-
-	
 	@GetMapping(value="/estoqueEntradaSaidaSetor")
 	public ModelAndView estoqueEntradaSaida(ModelAndView mav){
-		mav.setViewName("relatorio/estoque_entrada_saida_setor");
-		mav.addObject("setores", setorService.listar());
-		mav.addObject("setor", null);
-		return mav;
+		return relatorioController2.estoqueEntradaSaida(mav);
 	}
 	
 	@RequestMapping(value = "/estoqueEntradaSaidaSetor", method = RequestMethod.POST)
 	public ModelAndView estoqueEntradaSaidaSetor(@RequestParam(value="inicio",required=false) @DateTimeFormat(pattern="dd/MM/yyyy")  Date inicio, 
 			@RequestParam(value="fim",required=false) @DateTimeFormat(pattern="dd/MM/yyyy") Date fim, 
 			@RequestParam(value="idSetor",required=false) Integer idSetor, ModelAndView mav) {
-		if (idSetor == -1){
-			mav.setViewName("redirect:/relatorio/estoqueEntradaSaidaSetor");
-			return mav;
-		}
-		Setor setor = setorService.buscarPorId(idSetor);
-		
-		if(setor != null){
-			mav.addObject("entradas", entradaService.buscarPorSetorEData(setor, inicio, fim))
-				.addObject("estoques", estoqueSetorService.buscarPorSetor(idSetor))
-				.addObject("saidas", saidaService.listarPorOrigemEData(setor,inicio,fim))
-				.addObject("inicio",inicio)
-				.addObject("fim",fim)
-				.addObject("setor", setor)
-				.setViewName("relatorio/estoque_entrada_saida_setor");
-		}
-		
-		mav.addObject("setores", setorService.listar());
-		return mav;		
+		return relatorioController2.estoqueEntradaSaidaSetor(inicio, fim, idSetor, mav);		
 	}
 	
 	@GetMapping(value = "/listar")
@@ -129,28 +94,13 @@ public class RelatorioController {
 
 	@GetMapping(value = "/saidaPeriodoMaterial")
 	public ModelAndView formSaidaPeriodoMaterial(){
-		ModelAndView modelAndView = new ModelAndView("relatorio/saida_periodo_material")
-				.addObject("setores", setorService.listar())
-				.addObject("setorSelecionado" , new Setor())
-				.addObject("busca", false);
-		return modelAndView;
+		return relatorioController2.formSaidaPeriodoMaterial();
 	}
 	
 	
 	@PostMapping(value = "/saidaPeriodoMaterial")
 	public ModelAndView getSaida(@DateTimeFormat(pattern="dd/MM/yyyy") Date inicio, @DateTimeFormat(pattern="dd/MM/yyyy") Date fim, @RequestParam("destino") Setor setor ){	
-		ModelAndView modelAndView = new ModelAndView("relatorio/saida_periodo_material")
-				.addObject("setores", setorService.listar())
-				.addObject("dataInicio", inicio)
-				.addObject("dataFim", fim)
-				.addObject("setorSelecionado" , setor)
-				.addObject("busca", true);
-		try {
-			modelAndView.addObject("saidas", itemSaidaService.listarPorSetorEData(setor, inicio, fim));
-		} catch (ClinicasException e) {
-			modelAndView.addObject("alertas", new AlertSet().withLongWarning(e.getMessage()));
-		}
-		return modelAndView;
+		return relatorioController2.getSaida(inicio, fim, setor);
 		
 	}
 
@@ -165,29 +115,13 @@ public class RelatorioController {
 	
 	@GetMapping(value = "/entradaPeriodoMaterial")
 	public ModelAndView formEntradaPeriodoMaterial(){
-		ModelAndView modelAndView = new ModelAndView("relatorio/entrada_periodo_material")
-				.addObject("setores", setorService.listar())
-				.addObject("setorSelecionado" , new Setor())
-				.addObject("busca", false);
-		return modelAndView;
+		return relatorioController2.formEntradaPeriodoMaterial();
 	}
 	
 	
 	@PostMapping(value = "/entradaPeriodoMaterial")
 	public ModelAndView getEntrada(@DateTimeFormat(pattern="dd/MM/yyyy") Date inicio, @DateTimeFormat(pattern="dd/MM/yyyy") Date fim, @RequestParam("origem") Setor setor ){
-		ModelAndView modelAndView = new ModelAndView("relatorio/entrada_periodo_material")
-				.addObject("setores", setorService.listar())
-				.addObject("dataInicio", inicio)
-				.addObject("dataFim", fim)
-				.addObject("setorSelecionado" , setor)
-				.addObject("busca", true);
-		try {
-			modelAndView.addObject("entradas", itemEntradaService.listarPorSetorEData(setor, inicio, fim));
-		} catch (ClinicasException e) {
-			modelAndView.addObject("alertas", new AlertSet().withLongWarning(e.getMessage()));
-		}
-		
-		return modelAndView;
+		return relatorioController2.getEntrada(inicio, fim, setor);
 	}
 	
 	@GetMapping(value = "/api/getLotes/{idMaterial}")
@@ -222,12 +156,7 @@ public class RelatorioController {
 	
 	@GetMapping(value = "/mediaHistoricaMateriais")
 	public ModelAndView formMediaHistorica(){
-		ModelAndView modelAndView = new ModelAndView("relatorio/media_historica_materiais")
-				.addObject("setores", setorService.listar())
-				.addObject("setorSelecionado" , new Setor())
-				.addObject("buscarPeriodo", true)
-				.addObject("busca", false);
-		return modelAndView;
+		return relatorioController2.formMediaHistorica();
 	}
 
 	@PostMapping(value = "/mediaHistoricaMateriais")
@@ -242,26 +171,7 @@ public class RelatorioController {
 			@RequestParam("semestreFim") Integer semestreFim
 			){
 
-		Boolean buscarPeriodo = false;
-		if (tipoBusca.equals("busca_periodo"))
-			buscarPeriodo = true;
 
-		ModelAndView modelAndView = createHistoricalAverageModelAndView(inicio, fim, anoInicio, anoFim, setor, buscarPeriodo);
-
-		try {
-			if(buscarPeriodo){
-				modelAndView.addObject("saidas", itemSaidaService.getMediaSaidasPorPeriodo(setor, inicio, fim));
-			}
-			else{
-				modelAndView.addObject("saidas", itemSaidaService.getMediaSaidasPorSemestre(setor, semestreInicio, semestreFim, anoInicio, anoFim));
-			}
-		
-		} catch (ClinicasException e) {
-			modelAndView.addObject("alertas", new AlertSet().withLongWarning(e.getMessage()));
-		}
-
-		return modelAndView;
-	}
 
 	private ModelAndView createHistoricalAverageModelAndView(Date inicio, Date fim, Date anoInicio, Date anoFim, Setor setor,
 			Boolean buscarPeriodo) {
