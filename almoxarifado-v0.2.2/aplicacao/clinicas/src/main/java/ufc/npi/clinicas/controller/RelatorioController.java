@@ -171,8 +171,20 @@ public class RelatorioController {
 			@RequestParam("semestreFim") Integer semestreFim
 			){
 
-		return relatorioController2.getMediaHistorica(inicio, fim, anoInicio, anoFim, setor, tipoBusca, semestreInicio,
-				semestreFim);
+
+
+	private ModelAndView createHistoricalAverageModelAndView(Date inicio, Date fim, Date anoInicio, Date anoFim, Setor setor,
+			Boolean buscarPeriodo) {
+		ModelAndView modelAndView = new ModelAndView("relatorio/media_historica_materiais")
+				.addObject("setores", setorService.listar())
+				.addObject("dataInicio", inicio)
+				.addObject("dataFim", fim)
+				.addObject("anoInicio", anoInicio)
+				.addObject("anoFim", anoFim)
+				.addObject("setorSelecionado", setor)
+				.addObject("buscarPeriodo", buscarPeriodo)
+				.addObject("busca", true);
+		return modelAndView;
 	}
 	
 	@SuppressWarnings("unused")
