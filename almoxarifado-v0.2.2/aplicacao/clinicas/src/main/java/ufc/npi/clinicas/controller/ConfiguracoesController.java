@@ -1,7 +1,5 @@
 package ufc.npi.clinicas.controller;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;

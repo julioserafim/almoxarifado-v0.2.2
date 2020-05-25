@@ -23,6 +23,11 @@ public class CodigoDeBarras {
 	@JoinColumn(name="material_id")
 	private Material material;
 
+	public CodigoDeBarras(String codigo, Material material) {
+		this.codigo = codigo;
+		this.material = material;
+	}
+
 	public String getCodigo() {
 		return codigo;
 	}
