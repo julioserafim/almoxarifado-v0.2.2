@@ -13,9 +13,12 @@ import ufc.npi.clinicas.model.view.RelatorioEntradaSaidaDTO;
 public interface ItemSaidaService {
 
 	boolean existePorSaidaMaterialEMaterialELote(SaidaMaterial saidaMaterial, Material material, String lote);
-	ItemSaida adicionar(ItemSaida itemSaida);
 
-	void excluirItemSaidaMaterial(Long idItemSaidaMaterial) throws ClinicasException;
+	ItemSaida adicionar(Integer quantidade, Integer idSaida, Integer idMaterial, Integer idEstoqueLote, Integer idSetor) throws ClinicasException;
+
+disperse-coupling-in-saida-controller-adicionar-item-saida
+	boolean excluirItemSaidaMaterial(Long idItemSaidaMaterial);
+
 	ItemSaida buscarPorId(Long idItemSaidaMaterial);
 
 	List<ItemSaida> listarPorSaidaMaterial(SaidaMaterial saidaMaterial);

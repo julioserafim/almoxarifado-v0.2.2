@@ -11,9 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ufc.npi.clinicas.exceptions.ClinicasException;
 import ufc.npi.clinicas.model.*;
 import ufc.npi.clinicas.model.view.RelatorioEntradaSaidaDTO;
+import ufc.npi.clinicas.repository.EstoqueLoteRepository;
 import ufc.npi.clinicas.repository.ItemSaidaRepository;
+import ufc.npi.clinicas.repository.SaidaMaterialRepository;
+import ufc.npi.clinicas.repository.SetorRepository;
+import ufc.npi.clinicas.service.EstoqueSetorService;
 import ufc.npi.clinicas.service.ItemSaidaService;
 import ufc.npi.clinicas.util.Constants;
+import ufc.npi.clinicas.util.api.Response;
 
 @Named
 public class ItemSaidaServiceImpl implements ItemSaidaService {
@@ -21,6 +26,18 @@ public class ItemSaidaServiceImpl implements ItemSaidaService {
 	@Inject
 	@Autowired
 	private ItemSaidaRepository itemSaidaRepository;
+
+	@Autowired
+	private EstoqueLoteRepository estoqueLoteRepository;
+
+	@Autowired
+	private SaidaMaterialRepository saidaMaterialRepository;
+
+	@Autowired
+	private SetorRepository setorRepository;
+
+	@Autowired
+	private EstoqueSetorService estoqueSetorService;
 
 	@Override
 	public boolean existePorSaidaMaterialEMaterialELote(SaidaMaterial saidaMaterial, Material material, String lote) {
@@ -31,7 +48,34 @@ public class ItemSaidaServiceImpl implements ItemSaidaService {
 	}
 
 	@Override
-	public ItemSaida adicionar(ItemSaida itemSaida) {
+	public ItemSaida adicionar(Integer quantidade, Integer idSaida, Integer idMaterial, Integer idEstoqueLote, Integer idSetor) throws ClinicasException {
+		EstoqueLote estoqueLote = estoqueLoteRepository.getOne(idEstoqueLote);
+		Material material = estoqueLote.getMaterial();
+		SaidaMaterial saidaMaterial = this.saidaMaterialRepository.getOne(idSaida);
+
+		ItemSaida itemSaida = new ItemSaida();
+		itemSaida.setSaidaMaterial(saidaMaterial);
+		itemSaida.setMaterial(material);
+		itemSaida.setQuantidade(quantidade);
+		itemSaida.setLote(estoqueLote.getLote());
+
+		Setor setor = setorRepository.getOne(idSetor);
+		EstoqueSetor estoqueSetor = estoqueSetorService.buscarPorSetorEMaterial(setor, material);
+
+
+		if(existePorSaidaMaterialEMaterialELote(saidaMaterial, material, estoqueLote.getLote())){
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_ERRO_ITEM_SAIDA_EXISTENTE);
+		}else if (estoqueSetor == null || itemSaida.getQuantidade() > estoqueSetor.getQuantidade()){
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_ERRO_QUANTIDADE_MAIOR_ESTOQUE);
+		}else if(itemSaida.getQuantidade() > estoqueLote.getQuantidade()){
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_ERRO_QUANTIDADE_MAIOR_ESTOQUE_LOTE);
+		}else if(itemSaida.getQuantidade() <= 0){
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_ERRO_QUANTIDADE_INVALIDA);
+		}
+
+
+		itemSaida.setSaidaMaterial(saidaMaterial);
+		itemSaida.setMaterial(material);
 		this.itemSaidaRepository.save(itemSaida);
 		return itemSaida;
 	}
