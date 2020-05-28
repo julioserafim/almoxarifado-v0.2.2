@@ -16,6 +16,7 @@ public interface ItemSaidaService {
 
 	ItemSaida adicionar(Integer quantidade, Integer idSaida, Integer idMaterial, Integer idEstoqueLote, Integer idSetor) throws ClinicasException;
 
+disperse-coupling-in-saida-controller-adicionar-item-saida
 	boolean excluirItemSaidaMaterial(Long idItemSaidaMaterial);
 
 	ItemSaida buscarPorId(Long idItemSaidaMaterial);

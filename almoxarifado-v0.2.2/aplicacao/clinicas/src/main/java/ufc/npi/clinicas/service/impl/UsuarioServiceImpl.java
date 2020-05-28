@@ -30,12 +30,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	@Override
 	public boolean adicionar(Usuario usuario) {
 		try {
-			if (usuario.getSenha() == null ){
-				//senha padrão é o número do SIAPE
-				usuario.setSenha(usuario.getSiape());				
-			}
-			usuario.setHashSenha(usuario.getSenha());
-			usuario.setHabilitado(true);
+			usuario.gerarSenha();
 			usuarioRepository.save(usuario);
 		}
 		catch (DataIntegrityViolationException e){
@@ -50,10 +45,15 @@ public class UsuarioServiceImpl implements UsuarioService{
 		if(usuarioAntigo == null){
 			return false;
 		}
+
+		usuario.setHabilitado(usuarioAntigo.isHabilitado());
+		usuario.setSenha(usuarioAntigo.getSenha());
+
+		return this.salvarUsuario(usuario);
+	}
+
+	private boolean salvarUsuario(Usuario usuario) {
 		try {
-			usuario.setHabilitado(usuarioAntigo.isHabilitado());
-			usuario.setSenha(usuarioAntigo.getSenha());
-			
 			usuarioRepository.save(usuario);
 		} catch (IllegalArgumentException e) {
 			return false;

@@ -10,7 +10,7 @@ import ufc.npi.clinicas.model.Material;
 
 public interface MaterialService {
 
-	boolean adicionar(Material material);
+	boolean verificarESalvarMaterial(Material material);
 
 	boolean editar(Material material);
 
@@ -34,7 +34,11 @@ public interface MaterialService {
 
 	List<Material> buscarPorNomeOuCodigoBarrasOuCodigoInterno(String nome);
 
+
+	Map<String, Object> adicionar(Material material, CodigoDeBarras codigoDeBarras) throws ClinicasException;
+
 	void adicionarCodigoBarras(CodigoDeBarras codigoBarras) throws ClinicasException;
+
 	
 	boolean existeCodigoBarras(String codigoBarras);
 

@@ -1,6 +1,5 @@
 package ufc.npi.clinicas.service.impl;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -82,11 +81,16 @@ public class ItemSaidaServiceImpl implements ItemSaidaService {
 	}
 
 	@Override
-	public boolean excluirItemSaidaMaterial(Long idItemSaidaMaterial) {
+	public void excluirItemSaidaMaterial(Long idItemSaidaMaterial) throws ClinicasException {
+		ItemSaida itemSaida = itemSaidaRepository.getOne(idItemSaidaMaterial);
+
+		if(itemSaida == null) {
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_REMOVER_NULL);
+		} else if(itemSaida.getSaidaMaterial().getStatus().equals(Status.EM_ANDAMENTO)) {
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_REMOVER_ERRO);
+		}
 
 		itemSaidaRepository.delete(idItemSaidaMaterial);
-
-		return true;
 	}
 
 	@Override
