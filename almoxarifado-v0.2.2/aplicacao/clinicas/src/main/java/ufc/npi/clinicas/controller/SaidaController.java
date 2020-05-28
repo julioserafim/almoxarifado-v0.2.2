@@ -209,18 +209,13 @@ public class SaidaController {
 
 	@GetMapping(value = "saidaMaterial/remover/{idItemSaidaMaterial}")
 	public Response excluiAlocacaoItemMaterial(@PathVariable("idItemSaidaMaterial") Long idItemSaidaMaterial) {
-		ItemSaida itemSaida = itemSaidaService.buscarPorId(idItemSaidaMaterial);
+		try {
+			itemSaidaService.excluirItemSaidaMaterial(idItemSaidaMaterial);
+		} catch (ClinicasException e) {
+			return new Response().withFailStatus().withErrorMessage(e.getMessage());
+		}
 
-		if (itemSaida != null) {
-			if (itemSaida.getSaidaMaterial().getStatus().equals(Status.EM_ANDAMENTO)) {
-				itemSaidaService.excluirItemSaidaMaterial(idItemSaidaMaterial);
-				return new Response().withSuccessMessage(Constants.SAIDA_INCLUIR_MATERIAIS_SUCESSO_REMOVER);
-			}
-		}
-		else{
-			return new Response().withFailStatus().withErrorMessage(Constants.SAIDA_INCLUIR_MATERIAIS_REMOVER_NULL);
-		}
-		return new Response().withFailStatus().withErrorMessage(Constants.SAIDA_INCLUIR_MATERIAIS_REMOVER_ERRO);
+		return new Response().withSuccessMessage(Constants.SAIDA_INCLUIR_MATERIAIS_SUCESSO_REMOVER);
 	}
 
 	@PostMapping("/api/itemSaida/adicionar")

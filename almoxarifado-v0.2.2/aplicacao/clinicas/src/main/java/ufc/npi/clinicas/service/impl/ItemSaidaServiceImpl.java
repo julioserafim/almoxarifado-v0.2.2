@@ -1,6 +1,5 @@
 package ufc.npi.clinicas.service.impl;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,10 +9,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ufc.npi.clinicas.exceptions.ClinicasException;
-import ufc.npi.clinicas.model.ItemSaida;
-import ufc.npi.clinicas.model.Material;
-import ufc.npi.clinicas.model.SaidaMaterial;
-import ufc.npi.clinicas.model.Setor;
+import ufc.npi.clinicas.model.*;
 import ufc.npi.clinicas.model.view.RelatorioEntradaSaidaDTO;
 import ufc.npi.clinicas.repository.ItemSaidaRepository;
 import ufc.npi.clinicas.service.ItemSaidaService;
@@ -41,11 +37,16 @@ public class ItemSaidaServiceImpl implements ItemSaidaService {
 	}
 
 	@Override
-	public boolean excluirItemSaidaMaterial(Long idItemSaidaMaterial) {
+	public void excluirItemSaidaMaterial(Long idItemSaidaMaterial) throws ClinicasException {
+		ItemSaida itemSaida = itemSaidaRepository.getOne(idItemSaidaMaterial);
+
+		if(itemSaida == null) {
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_REMOVER_NULL);
+		} else if(itemSaida.getSaidaMaterial().getStatus().equals(Status.EM_ANDAMENTO)) {
+			throw new ClinicasException(Constants.SAIDA_INCLUIR_MATERIAIS_REMOVER_ERRO);
+		}
 
 		itemSaidaRepository.delete(idItemSaidaMaterial);
-
-		return true;
 	}
 
 	@Override
